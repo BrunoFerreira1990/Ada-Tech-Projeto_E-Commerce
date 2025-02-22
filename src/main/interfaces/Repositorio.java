@@ -1,4 +1,11 @@
 package interfaces;
 
-public interface Repositorio {
+public interface Repositorio <T> {
+
+    void cadastrar();
+
+    void listar();
+
+    void atualizar();
+
 }
