@@ -1,11 +1,9 @@
 package interfaces;
 
-public interface Repositorio <T> {
+import cliente.Cliente;
 
-    void cadastrar();
-
+public interface Repositorio<T> {
+    void cadastrar(T t);
     void listar();
-
-    void atualizar();
-
+    void atualizar(T t);
 }
