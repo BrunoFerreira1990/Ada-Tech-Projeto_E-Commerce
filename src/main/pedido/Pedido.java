@@ -8,26 +8,26 @@ import java.util.List;
 
 public class Pedido {
 
-    private int id;
+    private int idPedido;
     private Date dataCriacao;
     private StatusPedido statusPedido;
     private int quantidade;
     private List <Produto> listaDePedido = new ArrayList<>();
 
 
-    public Pedido(int id, Date dataCriacao, StatusPedido statusPedido, int quantidade) {
-        this.id = id;
+    public Pedido(int idPedido, Date dataCriacao, StatusPedido statusPedido, int quantidade) {
+        this.idPedido = idPedido;
         this.dataCriacao = new Date();
         this.statusPedido = StatusPedido.ABERTO;
         this.quantidade = quantidade;
     }
 
-    public int getId() {
-        return id;
+    public int getIdPedido() {
+        return idPedido;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.idPedido = idPedido;
     }
 
     public Date getDataCriacao() {
