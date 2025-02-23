@@ -1,5 +1,6 @@
 package pedido;
 
+import cliente.Cliente;
 import produto.Produto;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class Pedido {
         this.statusPedido = StatusPedido.ABERTO;
         this.quantidade = quantidade;
     }
+
 
     public int getIdPedido() {
         return idPedido;

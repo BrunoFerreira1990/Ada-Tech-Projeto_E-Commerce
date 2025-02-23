@@ -5,6 +5,7 @@ public class Cliente {
     private String nome;
     private String documento;
     private String email;
+    private String telefone;
     private String cep;
 
     public Cliente(int idCliente, String nome, String documento,String email, String endereco) {
@@ -12,12 +13,15 @@ public class Cliente {
         this.nome = nome;
         this.documento = documento;
         this.cep = cep;
+        this.telefone = telefone;
         this.email = email;
+
     }
 
     public Cliente() {
 
     }
+
 
     public int getIdCliente() {
         return idCliente;
@@ -31,13 +35,15 @@ public class Cliente {
         return documento;
     }
 
-    public String getEmail() {
+    public  String getEmail() {
         return email;
     }
 
     public String getCep() {
         return cep;
     }
+
+    public String getTelefone() {return telefone;}
 
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
@@ -58,4 +64,6 @@ public class Cliente {
     public void setCep(String cep) {
         this.cep = cep;
     }
+
+    public void setTelefone(String telefone) {this.telefone = telefone;}
 }
