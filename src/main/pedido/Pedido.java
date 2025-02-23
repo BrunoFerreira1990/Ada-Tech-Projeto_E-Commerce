@@ -1,17 +1,25 @@
 package pedido;
 
+import produto.Produto;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Pedido {
 
     private int id;
     private Date dataCriacao;
     private StatusPedido statusPedido;
+    private int quantidade;
+    private List <Produto> listaDePedido = new ArrayList<>();
 
-    public Pedido(int id, Date dataCriacao, StatusPedido statusPedido) {
+
+    public Pedido(int id, Date dataCriacao, StatusPedido statusPedido, int quantidade) {
         this.id = id;
         this.dataCriacao = new Date();
         this.statusPedido = StatusPedido.ABERTO;
+        this.quantidade = quantidade;
     }
 
     public int getId() {
@@ -35,11 +43,69 @@ public class Pedido {
         this.statusPedido = statusPedido;
     }
 
-    public static void remover() {
+    public List<Produto> getListaDePedido() {
+        return listaDePedido;
+    }
+
+    public void setListaDePedido(List<Produto> listaDePedido) {
+        this.listaDePedido = listaDePedido;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+// metodo dependente da criação do cadastro de produtos
+//    public void adicionarItem(Produto produto, int quantidade) {
+//        if(this.statusPedido != StatusPedido.ABERTO) {
+//            System.out.println("O status do pedido não está aberto. Nâo é possível remover itens.");
+//            return;
+//        }
+//
+//        if(!Produto.getProdutoCadastrado().contains(produto)) {
+//            System.out.println("Produto não cadastrado.");
+//            return;
+//        }
+//
+//        listaDePedido.add(produto);
+//        System.out.println("Produto " + produto.getNome() + " adicionado ao pedido.");
+//    }
+
+    public void removerProduto(Produto nome) {
+
+        if(this.statusPedido != StatusPedido.ABERTO) {
+            System.out.println("O status do pedido não está aberto. Nâo é possível remover itens.");
+            return;
+        }
+        if (listaDePedido.isEmpty()) {
+            System.out.println("Não há itens na lista de pedido.");
+        } else if (!listaDePedido.contains(nome)) {
+            System.out.println("O item informado não consta na lista de pedido.");
+        } else {
+            listaDePedido.remove(nome);
+            System.out.println("O item " + nome + " foi removido da lista de pedido.");
+        }
 
     }
 
-    public static void alterarQuantidade() {
+    public void alterarQuantidadeProduto(Produto nome, int quantidade) {
+
+        if(this.statusPedido != StatusPedido.ABERTO) {
+            System.out.println("O status do pedido não está aberto. Nâo é alterar a quantidade de itens.");
+            return;
+        }
+        if (listaDePedido.isEmpty()) {
+            System.out.println("Não há itens na lista de pedido.");
+        } else if (!listaDePedido.contains(nome)) {
+            System.out.println("O item informado não consta na lista de pedido.");
+        } else {
+
+        }
+
 
     }
 
@@ -50,8 +116,6 @@ public class Pedido {
     public static void entrega() {
 
     }
-
-
 
 }
 
