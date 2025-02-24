@@ -1,4 +1,4 @@
-package pedido;
+package enums;
 
 public enum StatusPedido {
 
