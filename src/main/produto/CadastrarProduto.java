@@ -1,8 +1,5 @@
 package produto;
-
-import cliente.Cliente;
 import interfaces.Repositorio;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -10,9 +7,12 @@ import java.util.Scanner;
 public class CadastrarProduto implements Repositorio<Produto> {
 
     Scanner sc = new Scanner(System.in);
-    private List<Produto> listaProdutos = new ArrayList<>();
+    public List<Produto> listaProdutos = new ArrayList<>();
     private int id = 0;
 
+    public List<Produto> getListaProdutos() {
+        return listaProdutos;
+    }
 
     @Override
     public void cadastrar(Produto produto) {
@@ -84,7 +84,7 @@ public class CadastrarProduto implements Repositorio<Produto> {
 
                     switch (opcao) {
                         case 1:
-                            System.out.println("Digite o novo nome do produto: ");
+                            System.out.print("Digite o novo nome do produto: ");
                             produtos.setNome(sc.nextLine());
                             break;
                         case 2:
@@ -120,6 +120,17 @@ public class CadastrarProduto implements Repositorio<Produto> {
         }
 
         System.out.println("Produto não encontrado para atualizar.");
+    }
+
+    public void consultarPeloCliente() {
+
+        for (Produto produto : listaProdutos) {
+            System.out.println("Identificador: " + produto.getIdProduto() +
+                    " | Nome do produto: " + produto.getNome() +
+                    " | Categoria do produto: " + produto.getCategoria() +
+                    " | Valor de venda: " + produto.getValorVenda());
+        }
+
     }
 
 
