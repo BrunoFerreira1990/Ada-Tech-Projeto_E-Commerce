@@ -1,19 +1,182 @@
-import enums.FormasEntrega;
-import enums.StatusPedido;
-import pedido.Pedido;
+package pedido;
+
+import cliente.CadastrarClientes;
+import cliente.Cliente;
+import produto.CadastrarProduto;
 import produto.Produto;
-import java.util.*;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Criando um pedido de exemplo
-        //Pedido pedido = new Pedido(1, new Date(), StatusPedido.ABERTO, 2, new ArrayList<>());
+        CadastrarClientes cadastrarClientes = new CadastrarClientes();
+        CadastrarProduto produto = new CadastrarProduto();
+        Pedido pedido = new Pedido(produto);
 
-        // Mudando o status para um fechado para ver a validação de "não aberto"
-        Pedido pedido = new Pedido(1, new Date(), StatusPedido.FINALIZADO, 2, new ArrayList<>()); // Se você quiser testar quando o pedido estiver fechado.
+        Scanner sc = new Scanner(System.in);
 
-        // Chama o método entrega passando o pedido e a forma de entrega
-        Pedido.entrega(pedido, FormasEntrega.SEDEX);
+        while (true) {
+            System.out.println("====== MENU PRINCIPAL ======");
+            System.out.println("Escolha a opção: ");
+            System.out.println("1 - Cadastro de clientes");
+            System.out.println("2 - Cadastro de produtos");
+            System.out.println("3 - Adição de produtos no carrinho");
+            System.out.println("4 - Sair do sistema\n");
+            System.out.print("Escolha uma opção: ");
+            int menuPrincipal = sc.nextInt();
+            System.out.println();
 
+            switch (menuPrincipal) {
+
+                case 1:
+                    int opcaoCadastro;
+                    do{
+
+                        System.out.println("------ CADASTRO DE CLIENTES ------");
+                        System.out.println("1 - Cadastrar Cliente");
+                        System.out.println("2 - Atualizar Cliente");
+                        System.out.println("3 - Listar Clientes");
+                        System.out.println("4 - Voltar ao Menu Principal\n");
+                        System.out.print("Escolha uma opção: ");
+
+                        opcaoCadastro = sc.nextInt();
+                        sc.nextLine();
+                        System.out.println();
+
+                        switch (opcaoCadastro) {
+                            case 1:
+
+                                Cliente novoCliente = new Cliente();
+                                cadastrarClientes.cadastrar(novoCliente);
+                                break;
+
+                            case 2:
+
+                                Cliente clienteAtualizado = new Cliente();
+                                cadastrarClientes.atualizar(clienteAtualizado);
+                                break;
+
+                            case 3:
+
+                                cadastrarClientes.listar();
+                                break;
+
+                            case 4:
+
+                                System.out.println("Saindo...");
+                                break;
+
+
+                            default:
+                                System.out.println("Opção inválida. Tente novamente.");
+                        }
+                    }while (opcaoCadastro != 4);
+                    break;
+
+                case 2:
+                    int opcaoProduto;
+
+                    do{
+
+                        System.out.println("------ CADASTRO DE PRODUTOS ------");
+                        System.out.println("1 - Cadastrar produto");
+                        System.out.println("2 - Atualizar produto");
+                        System.out.println("3 - Listar produto");
+                        System.out.println("4 - Sair\n");
+                        System.out.print("Escolha uma opção: ");
+
+                        opcaoProduto = sc.nextInt();
+                        sc.nextLine();
+
+                        switch (opcaoProduto) {
+                            case 1:
+                                Produto novoProduto = new Produto();
+                                produto.cadastrar(novoProduto);
+                                break;
+                            case 2:
+                                Produto atualizarProduto = new Produto();
+                                produto.atualizar(atualizarProduto);
+                                break;
+                            case 3:
+                                produto.listar();
+                                break;
+                            case 4:
+                                System.out.println("Saindo...");
+                                break;
+                            default:
+                                System.out.println("Opção inválida. Tente novamente.");
+                        }
+
+                    } while (opcaoProduto != 4);
+                    break;
+                case 3:
+                    if (pedido.getCliente() == null) {
+                        System.out.println("Nenhum cliente associado ao pedido. Selecione um cliente antes de adicionar produtos.");
+                        cadastrarClientes.listar(); // Exibe a lista de clientes cadastrados
+
+                        System.out.print("Informe o ID do cliente que deseja associar ao pedido: ");
+
+                        while (!sc.hasNextInt()) {
+                            System.out.println("Entrada inválida. Digite um número válido.");
+                            sc.next(); // Descarta a entrada inválida
+                        }
+
+                        int idCliente = sc.nextInt();
+                        sc.nextLine();
+
+                        Cliente clienteSelecionado = cadastrarClientes.buscarClientePorId (idCliente);
+
+                        if (clienteSelecionado != null) {
+                            pedido.setCliente(clienteSelecionado);
+                            System.out.println("Cliente " + clienteSelecionado.getNome() + " associado ao pedido.");
+                        } else {
+                            System.out.println("Cliente não encontrado. Retornando ao menu principal.");
+                            break; // Sai do case 3 e volta ao menu principal
+                        }
+                    }
+
+                    int opcaoPedido;
+                    do {
+                        System.out.println("------ PEDIDOS ------");
+                        System.out.println("1 - Adicionar produto no carrinho");
+                        System.out.println("2 - Remover produto do carrinho");
+                        System.out.println("3 - Consultar produtos do carrinho");
+                        System.out.println("4 - Voltar ao menu principal");
+                        System.out.print("Escolha uma opção: ");
+
+                        while (!sc.hasNextInt()) {
+                            System.out.println("Entrada inválida. Digite um número válido.");
+                            sc.next(); // Descarta a entrada inválida
+                        }
+
+                        opcaoPedido = sc.nextInt();
+                        sc.nextLine();
+
+                        switch (opcaoPedido) {
+                            case 1:
+                                pedido.adicionarProduto();
+                                break;
+                            case 2:
+                                pedido.removerProdutoDoPedido();
+                                break;
+                            case 3:
+                                pedido.alterarQuantidadeProduto();
+                                break;
+                            case 4:
+                                System.out.println("Voltando ao menu principal...");
+                                break;
+                            default:
+                                System.out.println("Opção inválida. Tente novamente.");
+                        }
+                    } while (opcaoPedido != 4);
+                    break;
+
+                case 4:
+                    System.out.println("Saindo do sistema.");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        }
     }
 }
