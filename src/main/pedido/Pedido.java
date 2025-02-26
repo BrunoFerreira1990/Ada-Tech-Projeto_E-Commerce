@@ -1,5 +1,6 @@
 package pedido;
-import enums.FormasEntrega;
+
+import cliente.Cliente;
 import enums.StatusPedido;
 import produto.CadastrarProduto;
 import produto.Produto;
@@ -12,24 +13,32 @@ public class Pedido {
     private Date dataCriacao;
     private StatusPedido statusPedido;
     private int quantidade;
+    private Cliente cliente;
     private Map<Produto, Integer> listaDePedido;
+    private CadastrarProduto cadastro;
 
-
-    public Pedido(int idPedido, Date dataCriacao, StatusPedido statusPedido, int quantidade,
-                  List<Produto> listaDePedido) {
+    public Pedido(int idPedido, Date dataCriacao, StatusPedido statusPedido, int quantidade, Cliente cliente,
+                  Map<Produto, Integer> listaDePedido) {
         this.idPedido = idPedido;
         this.dataCriacao = new Date();
         this.statusPedido = StatusPedido.ABERTO;
         this.quantidade = quantidade;
-        this.listaDePedido = new HashMap<>();
+        this.cliente = cliente;
+        this.listaDePedido = (listaDePedido != null) ? listaDePedido : new HashMap<>();
     }
 
+    public Pedido(CadastrarProduto cadastro) {
+        this.cadastro = cadastro;
+        this.listaDePedido = new HashMap<>();
+        this.statusPedido = StatusPedido.ABERTO;
+        this.dataCriacao = new Date();
+    }
 
     public int getIdPedido() {
         return idPedido;
     }
 
-    public void setId(int id) {
+    public void setIdPedido(int idPedido) {
         this.idPedido = idPedido;
     }
 
@@ -37,6 +46,9 @@ public class Pedido {
         return dataCriacao;
     }
 
+    public void setDataCriacao(Date dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
 
     public StatusPedido getStatusPedido() {
         return statusPedido;
@@ -44,14 +56,6 @@ public class Pedido {
 
     public void setStatusPedido(StatusPedido statusPedido) {
         this.statusPedido = statusPedido;
-    }
-
-    public Map<Produto, Integer> getListaDePedido() {
-        return listaDePedido;
-    }
-
-    public void setListaDePedido(Map<Produto, Integer> listaDePedido) {
-        this.listaDePedido = listaDePedido;
     }
 
     public int getQuantidade() {
@@ -62,21 +66,44 @@ public class Pedido {
         this.quantidade = quantidade;
     }
 
-    public void adicionarItem(CadastrarProduto cadastro, Scanner sc) {
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Map<Produto, Integer> getListaDePedido() {
+        return listaDePedido;
+    }
+
+    public void setListaDePedido(Map<Produto, Integer> listaDePedido) {
+        this.listaDePedido = listaDePedido;
+    }
+
+    public void adicionarProduto() {
+        Scanner sc = new Scanner(System.in);
+
         if (this.statusPedido != StatusPedido.ABERTO) {
             System.out.println("O status do pedido não está aberto. Não é possível adicionar itens.");
             return;
         }
 
-        int opcao;
+        if (this.cliente == null) {
+            System.out.println("Erro: Nenhum cliente está vinculado a este pedido.");
+            return;
+        }
 
+        System.out.println("Cliente associado ao pedido: " + cliente.getNome() + " (ID: " + cliente.getIdCliente() + ")");
+
+        int opcao;
         do {
-            System.out.println("\n=== Menu de Adição de Produto ===");
+            System.out.println("\n--- Menu de Adição de Produto ---");
             System.out.println("1 - Consultar produtos cadastrados");
             System.out.println("2 - Adicionar produto ao pedido");
             System.out.println("3 - Sair");
             System.out.print("Escolha uma opção: ");
-
 
             while (!sc.hasNextInt()) {
                 System.out.println("Entrada inválida. Digite um número válido.");
@@ -92,23 +119,25 @@ public class Pedido {
 
                 case 2:
                     System.out.print("Informe o número de identificação (ID) do produto desejado: ");
-
-                    while (!sc.hasNextInt()) {
-                        System.out.println("Entrada inválida. Digite um número válido.");
-                        sc.next();
-                    }
                     int idProduto = sc.nextInt();
                     sc.nextLine();
 
-                    System.out.println("Informe a quantidade do produto: ");
-                    quantidade = sc.nextInt();
+                    System.out.print("Informe a quantidade do produto: ");
+                    int quantidade = sc.nextInt();
+                    sc.nextLine();
 
+                    // Busca o produto pelo ID
                     Produto produto = buscarProdutoPorId(cadastro, idProduto);
-                    if (produto != null) {
+
+                    if (produto != null && quantidade > 0) {
                         listaDePedido.put(produto, quantidade);
                         System.out.println("Produto \"" + produto.getNome() + "\" adicionado ao pedido com a quantidade: " + quantidade);
                     } else {
-                        System.out.println("Produto não encontrado com o ID informado.");
+                        if (produto == null) {
+                            System.out.println("Produto não encontrado com o ID informado.");
+                        } else {
+                            System.out.println("Quantidade inválida. A quantidade deve ser maior que zero.");
+                        }
                     }
                     break;
 
@@ -123,7 +152,11 @@ public class Pedido {
     }
 
 
-    public void removerProdutoDoPedido(CadastrarProduto cadastro, Scanner sc) {
+
+    public void removerProdutoDoPedido() {
+        CadastrarProduto cadastro = new CadastrarProduto();
+        Scanner sc = new Scanner(System.in);
+
         if (this.statusPedido != StatusPedido.ABERTO) {
             System.out.println("O status do pedido não está aberto. Não é possível remover itens.");
             return;
@@ -167,7 +200,7 @@ public class Pedido {
                     if (listaDePedido.isEmpty()) {
                         System.out.println("Nenhum produto foi adicionado ao pedido.");
                     } else {
-                        for (Map.Entry<Produto, Integer> entry: listaDePedido.entrySet()) {
+                        for (Map.Entry<Produto, Integer> entry : listaDePedido.entrySet()) {
                             Produto produto = entry.getKey();
                             int quantidade = entry.getValue();
 
@@ -189,21 +222,13 @@ public class Pedido {
 
     }
 
-    private Produto buscarProdutoPorId(CadastrarProduto cadastro, int idProduto) {
-        for (Produto produto : cadastro.getListaProdutos()) {
-            if (produto.getIdProduto() == idProduto) {
-                return produto;
-            }
-        }
-        return null;
-    }
+    public void alterarQuantidadeProduto() {
+        Scanner sc = new Scanner(System.in);
 
-    public void alterarQuantidadeProduto(Scanner sc) {
         if (this.statusPedido != StatusPedido.ABERTO) {
             System.out.println("O status do pedido não está aberto. Não é possível alterar a quantidade de itens.");
             return;
         }
-
         System.out.print("Informe o ID do produto que deseja alterar a quantidade: ");
         int idProduto = sc.nextInt();
         sc.nextLine();
@@ -237,26 +262,41 @@ public class Pedido {
     }
 
 
-
     public static void realizarPagamento() {
 
     }
 
-    public static void entrega(Pedido pedido, FormasEntrega formaEntrega) {
-        if (pedido.getStatusPedido() != StatusPedido.ABERTO) {
-            System.out.println("O status do pedido não está aberto. Não é possível definir a entrega.");
-            return;
+
+    private Produto buscarProdutoPorId(CadastrarProduto cadastro, int idProduto) {
+        if (cadastro.getListaProdutos() == null || cadastro.getListaProdutos().isEmpty()) {
+            System.out.println("Nenhum produto cadastrado.");
+            return null;
         }
 
+        for (Produto produto : cadastro.getListaProdutos()) {
+            if (produto.getIdProduto() == idProduto) {
+                return produto; // Retorna o produto encontrado
+            }
+        }
 
-        double valorFrete = formaEntrega.getValor();
-
-
-        System.out.println("Pedido ID: " + pedido.getIdPedido());
-        System.out.println("Forma de Entrega: " + formaEntrega);
-        System.out.println("Valor do Frete: R$ " + valorFrete);
-
+        System.out.println("Produto com ID " + idProduto + " não encontrado.");
+        return null;
     }
 
+//    public static void entrega(Pedido pedido, FormasEntrega formaEntrega) {
+//        if (pedido.getStatusPedido() != StatusPedido.ABERTO) {
+//            System.out.println("O status do pedido não está aberto. Não é possível definir a entrega.");
+//            return;
+//        }
+//
+//
+//        double valorFrete = formaEntrega.getValor();
+//
+//
+//        System.out.println("Pedido ID: " + pedido.getIdPedido());
+//        System.out.println("Forma de Entrega: " + formaEntrega);
+//        System.out.println("Valor do Frete: R$ " + valorFrete);
+//
+//    }
 
 }
