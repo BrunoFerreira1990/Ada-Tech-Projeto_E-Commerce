@@ -16,8 +16,6 @@ public class CadastrarProduto implements Repositorio<Produto> {
 
     @Override
     public void cadastrar(Produto produto) {
-
-
         produto.setIdProduto(++id);
 
         System.out.print("Digite o nome do produto: ");
@@ -34,7 +32,7 @@ public class CadastrarProduto implements Repositorio<Produto> {
         produto.setValorProduto(sc.nextDouble());
         sc.nextLine();
 
-        listaProdutos.add((produto));
+        listaProdutos.add(produto);
 
         System.out.println("-------Produto cadastrado com sucesso!-------");
         System.out.println("ID: " + produto.getIdProduto());
@@ -42,7 +40,6 @@ public class CadastrarProduto implements Repositorio<Produto> {
         System.out.println("Valor de venda do produto: " + produto.getValorVenda());
         System.out.println("Valor de aquisição do produto: " + produto.getValorProduto());
         System.out.println("--------------------------------------------");
-
     }
 
     @Override
@@ -63,7 +60,7 @@ public class CadastrarProduto implements Repositorio<Produto> {
 
         System.out.println("Digite o ID do produto que deseja atualizar: ");
         int idProduto = sc.nextInt();
-        sc.nextLine(); // Consumir a quebra de linha pendente
+        sc.nextLine();
 
         for (Produto produtos : listaProdutos) {
             if (produtos.getIdProduto() == idProduto) {
