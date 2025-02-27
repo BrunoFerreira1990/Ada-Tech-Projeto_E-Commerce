@@ -14,16 +14,15 @@ public class Main {
         Pedido pedido = new Pedido(produto);
 
         Scanner sc = new Scanner(System.in);
-
-        while (true) {
+        int menuPrincipal;
+        do {
             System.out.println("====== MENU PRINCIPAL ======");
-            System.out.println("Escolha a opção: ");
             System.out.println("1 - Cadastro de clientes");
             System.out.println("2 - Cadastro de produtos");
-            System.out.println("3 - Adição de produtos no carrinho");
-            System.out.println("4 - Sair do sistema\n");
+            System.out.println("3 - Adição de produtos no carrinho de compras");
+            System.out.println("4 - Sair do sistema");
             System.out.print("Escolha uma opção: ");
-            int menuPrincipal = sc.nextInt();
+            menuPrincipal = sc.nextInt();
             System.out.println();
 
             switch (menuPrincipal) {
@@ -32,41 +31,31 @@ public class Main {
                     int opcaoCadastro;
                     do{
 
-                        System.out.println("------ CADASTRO DE CLIENTES ------");
-                        System.out.println("1 - Cadastrar Cliente");
-                        System.out.println("2 - Atualizar Cliente");
-                        System.out.println("3 - Listar Clientes");
+                        System.out.println("\n------ MENU CADASTRO DE CLIENTES ------");
+                        System.out.println("1 - Cadastrar cliente");
+                        System.out.println("2 - Atualizar dados de cliente");
+                        System.out.println("3 - Listar clientes");
                         System.out.println("4 - Voltar ao Menu Principal\n");
                         System.out.print("Escolha uma opção: ");
 
                         opcaoCadastro = sc.nextInt();
                         sc.nextLine();
-                        System.out.println();
 
                         switch (opcaoCadastro) {
                             case 1:
-
                                 Cliente novoCliente = new Cliente();
                                 cadastrarClientes.cadastrar(novoCliente);
                                 break;
-
                             case 2:
-
                                 Cliente clienteAtualizado = new Cliente();
                                 cadastrarClientes.atualizar(clienteAtualizado);
                                 break;
-
                             case 3:
-
                                 cadastrarClientes.listar();
                                 break;
-
                             case 4:
-
-                                System.out.println("Saindo...");
+                                System.out.println("Voltando ao Menu Principal\n");
                                 break;
-
-
                             default:
                                 System.out.println("Opção inválida. Tente novamente.");
                         }
@@ -78,11 +67,11 @@ public class Main {
 
                     do{
 
-                        System.out.println("------ CADASTRO DE PRODUTOS ------");
+                        System.out.println("\n------ MENU CADASTRO DE PRODUTOS ------");
                         System.out.println("1 - Cadastrar produto");
                         System.out.println("2 - Atualizar produto");
                         System.out.println("3 - Listar produto");
-                        System.out.println("4 - Sair\n");
+                        System.out.println("4 - Voltar ao Menu Principal\n");
                         System.out.print("Escolha uma opção: ");
 
                         opcaoProduto = sc.nextInt();
@@ -101,7 +90,7 @@ public class Main {
                                 produto.listar();
                                 break;
                             case 4:
-                                System.out.println("Saindo...");
+                                System.out.println("Voltando ao Menu Principal\n");
                                 break;
                             default:
                                 System.out.println("Opção inválida. Tente novamente.");
@@ -112,7 +101,7 @@ public class Main {
                 case 3:
                     if (pedido.getCliente() == null) {
                         System.out.println("Nenhum cliente associado ao pedido. Selecione um cliente antes de adicionar produtos.");
-                        cadastrarClientes.listar(); // Exibe a lista de clientes cadastrados
+                        cadastrarClientes.listar();
 
                         System.out.print("Informe o ID do cliente que deseja associar ao pedido: ");
 
@@ -131,22 +120,23 @@ public class Main {
                             System.out.println("Cliente " + clienteSelecionado.getNome() + " associado ao pedido.");
                         } else {
                             System.out.println("Cliente não encontrado. Retornando ao menu principal.");
-                            break; // Sai do case 3 e volta ao menu principal
+                            break;
                         }
                     }
 
                     int opcaoPedido;
                     do {
-                        System.out.println("------ PEDIDOS ------");
+                        System.out.println("\n------ MENU PEDIDOS ------");
                         System.out.println("1 - Adicionar produto no carrinho");
                         System.out.println("2 - Remover produto do carrinho");
-                        System.out.println("3 - Consultar produtos do carrinho");
-                        System.out.println("4 - Voltar ao menu principal");
+                        System.out.println("3 - Alterar quantidade de produto adicionado");
+                        System.out.println("4 - Consultar produtos no carrinho");
+                        System.out.println("5 - Voltar ao menu principal\n");
                         System.out.print("Escolha uma opção: ");
 
                         while (!sc.hasNextInt()) {
                             System.out.println("Entrada inválida. Digite um número válido.");
-                            sc.next(); // Descarta a entrada inválida
+                            sc.next();
                         }
 
                         opcaoPedido = sc.nextInt();
@@ -163,12 +153,15 @@ public class Main {
                                 pedido.alterarQuantidadeProduto();
                                 break;
                             case 4:
-                                System.out.println("Voltando ao menu principal...");
+                                Pedido.consultarProdutosCarrinho(pedido.getListaDePedido());
+                                break;
+                            case 5:
+                                System.out.println("Voltando ao Menu Principal\n");
                                 break;
                             default:
                                 System.out.println("Opção inválida. Tente novamente.");
                         }
-                    } while (opcaoPedido != 4);
+                    } while (opcaoPedido != 5);
                     break;
 
                 case 4:
@@ -177,6 +170,6 @@ public class Main {
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
-        }
+        } while(menuPrincipal != 4);
     }
 }
