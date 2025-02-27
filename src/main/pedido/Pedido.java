@@ -10,6 +10,8 @@ import java.util.*;
 
 public class Pedido {
 
+    private static int contadorIdPedido = 0;
+
     private int idPedido;
     private Date dataCriacao;
     private StatusPedido statusPedido;
@@ -20,7 +22,7 @@ public class Pedido {
 
     public Pedido(int idPedido, Date dataCriacao, StatusPedido statusPedido, int quantidade, Cliente cliente,
                   Map<Produto, Integer> listaDePedido) {
-        this.idPedido = idPedido;
+        this.idPedido = ++contadorIdPedido;
         this.dataCriacao = new Date();
         this.statusPedido = StatusPedido.ABERTO;
         this.quantidade = quantidade;
@@ -96,14 +98,15 @@ public class Pedido {
             return;
         }
 
-        System.out.println("Cliente associado ao pedido: " + cliente.getNome() + " (ID: " + cliente.getIdCliente() + ")");
+        System.out.println("Cliente associado ao pedido: " + cliente.getNome() + " (ID: " + cliente.getIdCliente() +
+                ")");
 
         int opcao;
         do {
             System.out.println("\n--- Menu de Adição de Produto ---");
             System.out.println("1 - Consultar produtos cadastrados");
             System.out.println("2 - Adicionar produto ao pedido");
-            System.out.println("3 - Sair");
+            System.out.println("3 - Sair para o Menu de Pedidos");
             System.out.print("Escolha uma opção: ");
 
             while (!sc.hasNextInt()) {
@@ -131,7 +134,8 @@ public class Pedido {
 
                     if (produto != null && quantidade > 0) {
                         listaDePedido.put(produto, quantidade);
-                        System.out.println("Produto \"" + produto.getNome() + "\" adicionado ao pedido com a quantidade: " + quantidade);
+                        System.out.println("Produto \"" + produto.getNome() + "\" adicionado ao pedido com a " +
+                                "quantidade: " + quantidade);
                     } else {
                         if (produto == null) {
                             System.out.println("Produto não encontrado com o ID informado.");
@@ -152,7 +156,6 @@ public class Pedido {
     }
 
 
-
     public void removerProdutoDoPedido() {
         CadastrarProduto cadastro = new CadastrarProduto();
         Scanner sc = new Scanner(System.in);
@@ -165,10 +168,12 @@ public class Pedido {
         int opcao;
 
         do {
-            System.out.println("=== Menu de Remoção de Produto ====");
+            System.out.println("--- Menu de Remoção de Produto ---");
             System.out.println("1 - Remover produto");
             System.out.println("2 - Consultar os produtos adicionados");
-            System.out.println("3 - Voltar ao Menu Principal");
+            System.out.println("3 - Voltar ao Menu Pedidos\n");
+            System.out.print("Escolha uma opção: ");
+
             opcao = sc.nextInt();
 
             switch (opcao) {
@@ -196,21 +201,7 @@ public class Pedido {
                     break;
 
                 case 2:
-                    System.out.println("Produtos no pedido:");
-                    if (listaDePedido.isEmpty()) {
-                        System.out.println("Nenhum produto foi adicionado ao pedido.");
-                    } else {
-                        for (Map.Entry<Produto, Integer> entry : listaDePedido.entrySet()) {
-                            Produto produto = entry.getKey();
-                            int quantidade = entry.getValue();
-
-                            System.out.println("ID: " + produto.getIdProduto() +
-                                    " | Nome: " + produto.getNome() +
-                                    " | Categoria: " + produto.getCategoria() +
-                                    " | Valor de venda: " + produto.getValorVenda() +
-                                    " | Quantidade: " + quantidade);
-                        }
-                    }
+                    consultarProdutosCarrinho(getListaDePedido());
                     break;
                 case 3:
                     System.out.println("Voltando para o Menu Principal.");
@@ -280,6 +271,26 @@ public class Pedido {
 
         System.out.println("Produto com ID " + idProduto + " não encontrado.");
         return null;
+    }
+
+    public static void consultarProdutosCarrinho(Map<Produto, Integer> listaDePedido) {
+
+        System.out.println("Produtos no pedido:");
+        if (listaDePedido.isEmpty()) {
+            System.out.println("Nenhum produto foi adicionado ao pedido.");
+        } else {
+            for (Map.Entry<Produto, Integer> entry : listaDePedido.entrySet()) {
+                Produto produto = entry.getKey();
+                int quantidade = entry.getValue();
+
+                System.out.println("ID: " + produto.getIdProduto() +
+                        " | Nome: " + produto.getNome() +
+                        " | Categoria: " + produto.getCategoria() +
+                        " | Valor de venda: " + produto.getValorVenda() +
+                        " | Quantidade: " + quantidade);
+            }
+        }
+
     }
 
 }
