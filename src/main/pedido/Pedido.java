@@ -1,6 +1,7 @@
 package pedido;
 
 import cliente.Cliente;
+import enums.FormasEntrega;
 import enums.StatusPedido;
 import produto.CadastrarProduto;
 import produto.Produto;
@@ -126,7 +127,6 @@ public class Pedido {
                     int quantidade = sc.nextInt();
                     sc.nextLine();
 
-                    // Busca o produto pelo ID
                     Produto produto = buscarProdutoPorId(cadastro, idProduto);
 
                     if (produto != null && quantidade > 0) {
@@ -283,20 +283,18 @@ public class Pedido {
         return null;
     }
 
-//    public static void entrega(Pedido pedido, FormasEntrega formaEntrega) {
-//        if (pedido.getStatusPedido() != StatusPedido.ABERTO) {
-//            System.out.println("O status do pedido não está aberto. Não é possível definir a entrega.");
-//            return;
-//        }
-//
-//
-//        double valorFrete = formaEntrega.getValor();
-//
-//
-//        System.out.println("Pedido ID: " + pedido.getIdPedido());
-//        System.out.println("Forma de Entrega: " + formaEntrega);
-//        System.out.println("Valor do Frete: R$ " + valorFrete);
-//
-//    }
+    public static void entrega(Pedido pedido, FormasEntrega formaEntrega) {
+        if (pedido.getStatusPedido() != StatusPedido.ABERTO) {
+            System.out.println("O status do pedido não está aberto. Não é possível definir a entrega.");
+            return;
+        }
+
+        double valorFrete = formaEntrega.getValor();
+
+        System.out.println("Pedido ID: " + pedido.getIdPedido());
+        System.out.println("Forma de Entrega: " + formaEntrega);
+        System.out.println("Valor do Frete: R$ " + valorFrete);
+
+    }
 
 }
