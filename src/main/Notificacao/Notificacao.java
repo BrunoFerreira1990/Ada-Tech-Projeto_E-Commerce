@@ -4,12 +4,12 @@ import interfaces.Comunicacao;
 import cliente.Cliente;
 import pedido.Pedido;
 
-public class Notificação implements Comunicacao {
+public class Notificacao implements Comunicacao {
 
     private Cliente cliente;
     private Pedido pedido;
 
-    public Notificação(Cliente cliente, Pedido pedido) {
+    public Notificacao(Cliente cliente, Pedido pedido) {
         this.cliente = cliente;
         this.pedido = pedido;
     }
@@ -33,7 +33,7 @@ public class Notificação implements Comunicacao {
     public void enviarWhatsapp(String whatsapp) {
         String dados = obterDadosNotificacao();
         String telefone = cliente.getTelefone();
-        System.out.println(dados + ", Enviando Whatsapp para: " + telefone);
+        System.out.println(dados + ", Enviando WhatsApp para: " + telefone);
     }
 
     @Override
@@ -43,5 +43,3 @@ public class Notificação implements Comunicacao {
         System.out.println(dados + ", Enviando SMS para: " + telefone);
     }
 }
-
-

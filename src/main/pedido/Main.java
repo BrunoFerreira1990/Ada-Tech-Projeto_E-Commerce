@@ -4,10 +4,13 @@ import cliente.CadastrarClientes;
 import cliente.Cliente;
 import produto.CadastrarProduto;
 import produto.Produto;
+import enums.FormasEntrega;
+import enums.StatusPedido;
 
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         CadastrarClientes cadastrarClientes = new CadastrarClientes();
         CadastrarProduto produto = new CadastrarProduto();
@@ -20,7 +23,9 @@ public class Main {
             System.out.println("1 - Cadastro de clientes");
             System.out.println("2 - Cadastro de produtos");
             System.out.println("3 - Adição de produtos no carrinho de compras");
-            System.out.println("4 - Sair do sistema");
+            System.out.println("4 - Finalizar pedido");
+            System.out.println("5 - Consultar pedido");
+            System.out.println("6 - Sair do sistema");
             System.out.print("Escolha uma opção: ");
             menuPrincipal = sc.nextInt();
             System.out.println();
@@ -29,8 +34,7 @@ public class Main {
 
                 case 1:
                     int opcaoCadastro;
-                    do{
-
+                    do {
                         System.out.println("\n------ MENU CADASTRO DE CLIENTES ------");
                         System.out.println("1 - Cadastrar cliente");
                         System.out.println("2 - Atualizar dados de cliente");
@@ -59,14 +63,13 @@ public class Main {
                             default:
                                 System.out.println("Opção inválida. Tente novamente.");
                         }
-                    }while (opcaoCadastro != 4);
+                    } while (opcaoCadastro != 4);
                     break;
 
                 case 2:
                     int opcaoProduto;
 
-                    do{
-
+                    do {
                         System.out.println("\n------ MENU CADASTRO DE PRODUTOS ------");
                         System.out.println("1 - Cadastrar produto");
                         System.out.println("2 - Atualizar produto");
@@ -98,6 +101,7 @@ public class Main {
 
                     } while (opcaoProduto != 4);
                     break;
+
                 case 3:
                     if (pedido.getCliente() == null) {
                         System.out.println("Nenhum cliente associado ao pedido. Selecione um cliente antes de adicionar produtos.");
@@ -107,13 +111,13 @@ public class Main {
 
                         while (!sc.hasNextInt()) {
                             System.out.println("Entrada inválida. Digite um número válido.");
-                            sc.next(); // Descarta a entrada inválida
+                            sc.next();
                         }
 
                         int idCliente = sc.nextInt();
                         sc.nextLine();
 
-                        Cliente clienteSelecionado = cadastrarClientes.buscarClientePorId (idCliente);
+                        Cliente clienteSelecionado = cadastrarClientes.buscarClientePorId(idCliente);
 
                         if (clienteSelecionado != null) {
                             pedido.setCliente(clienteSelecionado);
@@ -165,11 +169,60 @@ public class Main {
                     break;
 
                 case 4:
+                    // Finalizar o pedido
+                    if (pedido.getStatusPedido() == StatusPedido.ABERTO) {
+                        System.out.println("Escolha a forma de entrega para o pedido:");
+                        System.out.println("1 - PAC");
+                        System.out.println("2 - SEDEX");
+                        System.out.println("3 - TRANSPORTADORA");
+                        System.out.print("Escolha uma opção: ");
+                        int formaEntregaEscolhida = sc.nextInt();
+
+                        FormasEntrega formaEntrega = null;
+                        switch (formaEntregaEscolhida) {
+                            case 1:
+                                formaEntrega = FormasEntrega.PAC;
+                                break;
+                            case 2:
+                                formaEntrega = FormasEntrega.SEDEX;
+                                break;
+                            case 3:
+                                formaEntrega = FormasEntrega.TRANSPORTADORA;
+                                break;
+                            default:
+                                System.out.println("Opção inválida. Retornando ao menu principal.");
+                                break;
+                        }
+
+                        if (formaEntrega != null) {
+                            FinalizarPedido finalizarPedido = new FinalizarPedido();
+                            finalizarPedido.finalizar(pedido, formaEntrega);
+                        }
+                    } else {
+                        System.out.println("Não é possível finalizar um pedido com status diferente de ABERTO.");
+                    }
+                    break;
+
+                case 5:
+
+                    System.out.println("\n--- CONSULTAR PEDIDO ---");
+                    if (pedido.getCliente() != null) {
+                        System.out.println("ID do Pedido: " + pedido.getIdPedido());
+                        System.out.println("Cliente: " + pedido.getCliente().getNome());
+                        System.out.println("Status do Pedido: " + pedido.getStatusPedido());
+                        Pedido.consultarProdutosCarrinho(pedido.getListaDePedido());
+                    } else {
+                        System.out.println("Nenhum pedido foi realizado ainda.");
+                    }
+                    break;
+
+                case 6:
                     System.out.println("Saindo do sistema.");
                     break;
+
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
-        } while(menuPrincipal != 4);
+        } while (menuPrincipal != 6);
     }
 }

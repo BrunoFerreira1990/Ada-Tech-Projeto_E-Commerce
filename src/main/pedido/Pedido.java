@@ -1,7 +1,6 @@
 package pedido;
 
 import cliente.Cliente;
-import enums.FormasEntrega;
 import enums.StatusPedido;
 import produto.CadastrarProduto;
 import produto.Produto;
@@ -31,6 +30,7 @@ public class Pedido {
     }
 
     public Pedido(CadastrarProduto cadastro) {
+        this.idPedido = ++contadorIdPedido;
         this.cadastro = cadastro;
         this.listaDePedido = new HashMap<>();
         this.statusPedido = StatusPedido.ABERTO;
