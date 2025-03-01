@@ -1,230 +1,221 @@
 package cliente;
-import interfaces.Repositorio;
 
+import interfaces.Repositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class CadastrarClientes implements Repositorio<Cliente> {
-
     private List<Cliente> clientes = new ArrayList<>();
-    private int id = 1;
     private Scanner sc = new Scanner(System.in);
 
     @Override
     public void cadastrar(Cliente cliente) {
-        cliente.setIdCliente(id++);
+        cliente.setIdCliente(clientes.size() + 1);  // ID incremental
+        solicitarDadosCliente(cliente);
+        clientes.add(cliente);
+        System.out.println("Cliente cadastrado com sucesso!\n" + cliente);
+    }
 
+    @Override
+    public void listar() {
+        System.out.println("Lista de Clientes:");
+
+        if (clientes.isEmpty()) {
+            System.out.println("Nenhum cliente cadastrado.");
+            return;
+        }
+
+        for (Cliente cliente : clientes) {
+            System.out.println(cliente);
+            System.out.println("---------------");
+        }
+    }
+
+    @Override
+    public void atualizar(Cliente cliente) {
+        System.out.println("Digite o ID do cliente a ser atualizado: ");
+        int idCliente = sc.nextInt();
+        sc.nextLine();
+
+        Cliente clienteExistente = buscarPorId(idCliente);
+        if (clienteExistente == null) {
+            System.out.println("Cliente não encontrado!");
+            return;
+        }
+
+        System.out.println("Cliente encontrado: " + clienteExistente);
+
+        // Menu para o usuário escolher o campo que deseja atualizar
+        System.out.println("\nEscolha o campo que deseja atualizar:");
+        System.out.println("1 - Nome");
+        System.out.println("2 - CPF");
+        System.out.println("3 - Email");
+        System.out.println("4 - Telefone");
+        System.out.println("5 - CEP");
+        System.out.print("Escolha uma opção: ");
+        int opcaoAtualizacao = sc.nextInt();
+        sc.nextLine();
+
+        switch (opcaoAtualizacao) {
+            case 1:
+                atualizarNome(clienteExistente);
+                break;
+            case 2:
+                atualizarCPF(clienteExistente);
+                break;
+            case 3:
+                atualizarEmail(clienteExistente);
+                break;
+            case 4:
+                atualizarTelefone(clienteExistente);
+                break;
+            case 5:
+                atualizarCep(clienteExistente);
+                break;
+            default:
+                System.out.println("Opção inválida.");
+        }
+
+        System.out.println("Cliente atualizado com sucesso!");
+        System.out.println(clienteExistente);  // Exibe o cliente atualizado
+    }
+
+    // Métodos para atualizar campos individuais do cliente
+    private void atualizarNome(Cliente cliente) {
+        String nome;
+        do {
+            System.out.print("Informe o novo nome do cliente: ");
+            nome = sc.nextLine();
+            if (nome.isEmpty()) {
+                System.out.println("Nome não pode ser vazio.");
+            } else if (!nome.matches("[a-zA-Z ]+")) {
+                System.out.println("O nome não pode conter números ou caracteres especiais.");
+            }
+        } while (nome.isEmpty() || !nome.matches("[a-zA-Z ]+"));
+
+        cliente.setNome(nome);
+    }
+
+    private void atualizarCPF(Cliente cliente) {
+        String cpf;
+        do {
+            System.out.print("Informe o novo CPF do cliente: ");
+            cpf = sc.nextLine();
+            if (cpf.isEmpty()) {
+                System.out.println("O CPF não pode ser vazio.");
+            } else if (cpf.length() != 11) {
+                System.out.println("O CPF deve ter 11 dígitos.");
+            } else if (!cpf.matches("\\d+")) {
+                System.out.println("O CPF deve conter apenas números.");
+            }
+        } while (cpf.isEmpty() || cpf.length() != 11 || !cpf.matches("\\d+"));
+
+        cliente.setDocumento(FormatarDocumentos.formatarCPF(cpf));
+    }
+
+    private void atualizarEmail(Cliente cliente) {
+        String email;
+        do {
+            System.out.print("Informe o novo e-mail do cliente: ");
+            email = sc.nextLine();
+            if (email.isEmpty()) {
+                System.out.println("O e-mail não pode ser vazio.");
+            } else if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                System.out.println("E-mail inválido.");
+            }
+        } while (email.isEmpty() || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$"));
+
+        cliente.setEmail(email);
+    }
+
+    private void atualizarTelefone(Cliente cliente) {
+        String telefone;
+        do {
+            System.out.print("Informe o novo telefone do cliente: ");
+            telefone = sc.nextLine();
+            if (telefone.isEmpty()) {
+                System.out.println("O telefone não pode ser vazio.");
+            } else if (!telefone.matches("\\d{10,11}")) {
+                System.out.println("Telefone inválido. O telefone deve conter 10 ou 11 dígitos.");
+            }
+        } while (telefone.isEmpty() || !telefone.matches("\\d{10,11}"));
+
+        cliente.setTelefone(telefone);
+    }
+
+    private void atualizarCep(Cliente cliente) {
+        String cep;
+        do {
+            System.out.print("Informe o novo CEP do cliente: ");
+            cep = sc.nextLine();
+            if (cep.isEmpty()) {
+                System.out.println("O CEP não pode ser vazio.");
+            } else if (!cep.matches("\\d{8}")) {
+                System.out.println("CEP inválido. O CEP deve conter exatamente 8 dígitos.");
+            }
+        } while (cep.isEmpty() || !cep.matches("\\d{8}"));
+
+        cliente.setCep(cep);
+    }
+
+    private void solicitarDadosCliente(Cliente cliente) {
         String nome;
         do {
             System.out.println("Digite o nome do cliente: ");
             nome = sc.nextLine();
-            if (nome.trim().isEmpty()) {
-                System.out.println("O nome não pode ser vazio. Tente novamente.");
+            if (!ValidacaoDados.validarNome(nome)) {
+                System.out.println("O nome não pode conter números ou ser vazio. Tente novamente.");
             }
-        } while (nome.trim().isEmpty());
+        } while (!ValidacaoDados.validarNome(nome));
         cliente.setNome(nome);
-
 
         String cpf;
         do {
-            System.out.println("Digite o CPF do cliente: ");
+            System.out.println("Digite o CPF do cliente (apenas números): ");
             cpf = sc.nextLine();
-            if (cpf.trim().isEmpty()) {
-                System.out.println("O CPF não pode ser vazio. Tente novamente.");
+            if (!ValidacaoDados.validarCPF(cpf)) {
+                System.out.println("O CPF deve ter 11 dígitos e não pode ser vazio. Tente novamente.");
             }
-        } while (cpf.trim().isEmpty());
-        cliente.setDocumento(cpf);
-
+        } while (!ValidacaoDados.validarCPF(cpf));
+        cliente.setDocumento(FormatarDocumentos.formatarCPF(cpf));
 
         String email;
         do {
-            System.out.println("Digite o Email do cliente: ");
+            System.out.println("Digite o email do cliente: ");
             email = sc.nextLine();
-            if (email.trim().isEmpty()) {
-                System.out.println("O Email não pode ser vazio. Tente novamente.");
+            if (!ValidacaoDados.validarEmail(email)) {
+                System.out.println("O email não pode ser vazio e deve ser válido. Tente novamente.");
             }
-        } while (email.trim().isEmpty());
+        } while (!ValidacaoDados.validarEmail(email));
         cliente.setEmail(email);
 
-        // Verificação do Telefone
         String telefone;
         do {
-            System.out.println("Digite o Telefone do cliente: ");
+            System.out.println("Digite o telefone do cliente: ");
             telefone = sc.nextLine();
-            if (telefone.trim().isEmpty()) {
-                System.out.println("O Telefone não pode ser vazio. Tente novamente.");
+            if (!ValidacaoDados.validarTelefone(telefone)) {
+                System.out.println("O telefone não pode ser vazio. Tente novamente.");
             }
-        } while (telefone.trim().isEmpty());
+        } while (!ValidacaoDados.validarTelefone(telefone));
         cliente.setTelefone(telefone);
-
 
         String cep;
         do {
             System.out.println("Digite o CEP do cliente: ");
             cep = sc.nextLine();
-            if (cep.trim().isEmpty()) {
+            if (!ValidacaoDados.validarCep(cep)) {
                 System.out.println("O CEP não pode ser vazio. Tente novamente.");
             }
-        } while (cep.trim().isEmpty());
+        } while (!ValidacaoDados.validarCep(cep));
         cliente.setCep(cep);
-
-        clientes.add(cliente);
-
-        System.out.println("-------Cliente cadastrado com sucesso!-------");
-        System.out.println("ID: " + cliente.getIdCliente());
-        System.out.println("Nome: " + cliente.getNome());
-        System.out.println("CPF: " + cliente.getDocumento());
-        System.out.println("Email: " + cliente.getEmail());
-        System.out.println("Telefone: " + cliente.getTelefone());
-        System.out.println("CEP: " + cliente.getCep());
-        System.out.println("--------------------------------------------");
     }
 
 
-    @Override
-    public void listar() {
-
-        System.out.println("Lista de Clientes Cadastrados: ");
-
-        for (Cliente cliente : clientes) {
-            System.out.println("ID: " + cliente.getIdCliente());
-            System.out.println("Nome: " + cliente.getNome());
-            System.out.println("Documento: " + cliente.getDocumento());
-            System.out.println("Email: " + cliente.getEmail());
-            System.out.println("Telefone: " + cliente.getTelefone());
-            System.out.println("CEP: " + cliente.getCep());
-            System.out.println("-------------------------------------");
-        }
-    }
-
-    @Override
-    public void atualizar(Cliente clienteAtualizado) {
-
-        int idClienteAtualizar = -1;
-
-        while (idClienteAtualizar < 0) {
-            System.out.println("Digite o ID do Cliente que deseja atualizar: ");
-            if (sc.hasNextInt()) {
-                idClienteAtualizar = sc.nextInt();
-                sc.nextLine();
-                if (idClienteAtualizar <= 0) {
-                    System.out.println("O ID é INVÁLIDO, digite novamente!!!");
-                    idClienteAtualizar = -1;
-                }
-            } else {
-                System.out.println("ID INCORRETO! Digite apenas números no ID.");
-                sc.nextLine();
-            }
-        }
-
-        for (Cliente cliente : clientes) {
-            if (cliente.getIdCliente() == idClienteAtualizar) {
-                System.out.println("Cliente encontrado! O que você gostaria de atualizar?");
-
-                boolean continuar = true;
-                while (continuar) {
-                    System.out.println("1 - Nome");
-                    System.out.println("2 - CPF");
-                    System.out.println("3 - Email");
-                    System.out.println("4 - Telefone");
-                    System.out.println("5 - CEP");
-                    System.out.println("6 - Finalizar atualização");
-                    System.out.print("Digite o número do campo que deseja alterar: ");
-
-                    int opcao = sc.nextInt();
-                    sc.nextLine();
-
-                    switch (opcao) {
-                        case 1:
-                            String nome;
-                            do {
-                                System.out.println("Digite o novo nome do cliente: ");
-                                nome = sc.nextLine();
-                                if (nome.trim().isEmpty()) {
-                                    System.out.println("O nome não pode ser vazio. Tente novamente.");
-                                }
-                            } while (nome.trim().isEmpty());
-                            cliente.setNome(nome);
-                            break;
-
-                        case 2:
-                            String cpf;
-                            do {
-                                System.out.println("Digite o novo CPF do cliente: ");
-                                cpf = sc.nextLine();
-                                if (cpf.trim().isEmpty()) {
-                                    System.out.println("O CPF não pode ser vazio. Tente novamente.");
-                                }
-                            } while (cpf.trim().isEmpty());
-                            cliente.setDocumento(cpf);
-                            break;
-
-                        case 3:
-                            String email;
-                            do {
-                                System.out.println("Digite o novo Email do cliente: ");
-                                email = sc.nextLine();
-                                if (email.trim().isEmpty()) {
-                                    System.out.println("O Email não pode ser vazio. Tente novamente.");
-                                }
-                            } while (email.trim().isEmpty());
-                            cliente.setEmail(email);
-                            break;
-
-                        case 4:
-                            String telefone;
-                            do {
-                                System.out.println("Digite o novo Telefone do cliente: ");
-                                telefone = sc.nextLine();
-                                if (telefone.trim().isEmpty()) {
-                                    System.out.println("O Telefone não pode ser vazio. Tente novamente.");
-                                }
-                            } while (telefone.trim().isEmpty());
-                            cliente.setTelefone(telefone);
-                            break;
-
-                        case 5:
-                            String cep;
-                            do {
-                                System.out.println("Digite o novo CEP do cliente: ");
-                                cep = sc.nextLine();
-                                if (cep.trim().isEmpty()) {
-                                    System.out.println("O CEP não pode ser vazio. Tente novamente.");
-                                }
-                            } while (cep.trim().isEmpty());
-                            cliente.setCep(cep);
-                            break;
-
-                        case 6:
-                            continuar = false;
-                            break;
-
-                        default:
-                            System.out.println("Opção inválida. Tente novamente.");
-                            break;
-                    }
-                }
-
-                System.out.println("-------Cliente atualizado com sucesso!-------");
-                System.out.println("ID: " + cliente.getIdCliente());
-                System.out.println("Nome: " + cliente.getNome());
-                System.out.println("CPF: " + cliente.getDocumento());
-                System.out.println("Email: " + cliente.getEmail());
-                System.out.println("Telefone: " + cliente.getTelefone());
-                System.out.println("CEP: " + cliente.getCep());
-                return;
-            }
-        }
-
-        System.out.println("Cliente não encontrado para atualizar!!!");
-    }
-
-    public Cliente buscarClientePorId(int idCliente) {
+    public Cliente buscarPorId(int idCliente) {
         return clientes.stream()
                 .filter(cliente -> cliente.getIdCliente() == idCliente)
                 .findFirst()
                 .orElse(null);
     }
-
 }

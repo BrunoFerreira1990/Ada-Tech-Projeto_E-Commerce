@@ -8,20 +8,17 @@ public class Cliente {
     private String telefone;
     private String cep;
 
-    public Cliente(int idCliente, String nome, String documento,String email, String endereco) {
+    public Cliente(int idCliente, String nome, String documento, String email, String telefone, String cep) {
         this.idCliente = idCliente;
         this.nome = nome;
         this.documento = documento;
-        this.cep = cep;
-        this.telefone = telefone;
         this.email = email;
-
+        this.telefone = telefone;
+        this.cep = cep;
     }
 
     public Cliente() {
-
     }
-
 
     public int getIdCliente() {
         return idCliente;
@@ -35,15 +32,17 @@ public class Cliente {
         return documento;
     }
 
-    public  String getEmail() {
+    public String getEmail() {
         return email;
+    }
+
+    public String getTelefone() {
+        return telefone;
     }
 
     public String getCep() {
         return cep;
     }
-
-    public String getTelefone() {return telefone;}
 
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
@@ -61,9 +60,27 @@ public class Cliente {
         this.email = email;
     }
 
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     public void setCep(String cep) {
         this.cep = cep;
     }
 
-    public void setTelefone(String telefone) {this.telefone = telefone;}
+    public void setCpf(String cpf) {
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "idCliente=" + idCliente +
+                ", nome='" + nome + '\'' +
+                ", documento='" + documento + '\'' +
+                ", email='" + email + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", cep='" + cep + '\'' +
+                '}';
+    }
 }
+

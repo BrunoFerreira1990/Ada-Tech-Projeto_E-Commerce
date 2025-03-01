@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class CadastrarProduto implements Repositorio<Produto> {
+public class CadastrarProduto extends Produto implements Repositorio<Produto> {
 
     Scanner sc = new Scanner(System.in);
     public List<Produto> listaProdutos = new ArrayList<>();

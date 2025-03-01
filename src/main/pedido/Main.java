@@ -117,7 +117,8 @@ public class Main {
                         int idCliente = sc.nextInt();
                         sc.nextLine();
 
-                        Cliente clienteSelecionado = cadastrarClientes.buscarClientePorId(idCliente);
+                        // Alteração aqui para chamar o método correto
+                        Cliente clienteSelecionado = cadastrarClientes.buscarPorId(idCliente);
 
                         if (clienteSelecionado != null) {
                             pedido.setCliente(clienteSelecionado);
@@ -169,16 +170,22 @@ public class Main {
                     break;
 
                 case 4:
-                    // Finalizar o pedido
+
                     if (pedido.getStatusPedido() == StatusPedido.ABERTO) {
+
                         System.out.println("Escolha a forma de entrega para o pedido:");
-                        System.out.println("1 - PAC");
-                        System.out.println("2 - SEDEX");
-                        System.out.println("3 - TRANSPORTADORA");
+                        System.out.println("1 - PAC - R$ " + FormasEntrega.PAC.getValor());
+                        System.out.println("2 - SEDEX - R$ " + FormasEntrega.SEDEX.getValor());
+                        System.out.println("3 - TRANSPORTADORA - R$ " + FormasEntrega.TRANSPORTADORA.getValor());
+
+
                         System.out.print("Escolha uma opção: ");
+
                         int formaEntregaEscolhida = sc.nextInt();
 
+
                         FormasEntrega formaEntrega = null;
+
                         switch (formaEntregaEscolhida) {
                             case 1:
                                 formaEntrega = FormasEntrega.PAC;
@@ -190,18 +197,24 @@ public class Main {
                                 formaEntrega = FormasEntrega.TRANSPORTADORA;
                                 break;
                             default:
-                                System.out.println("Opção inválida. Retornando ao menu principal.");
+                                System.out.println("Opção inválida.");
                                 break;
                         }
 
+
                         if (formaEntrega != null) {
+                            //finalizar pedido
                             FinalizarPedido finalizarPedido = new FinalizarPedido();
                             finalizarPedido.finalizar(pedido, formaEntrega);
+
+                        } else {
+                            System.out.println("Não foi possível finalizar o pedido, pois a forma de entrega é inválida.");
                         }
                     } else {
                         System.out.println("Não é possível finalizar um pedido com status diferente de ABERTO.");
                     }
                     break;
+
 
                 case 5:
 
@@ -226,3 +239,4 @@ public class Main {
         } while (menuPrincipal != 6);
     }
 }
+
