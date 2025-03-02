@@ -1,13 +1,12 @@
 package produto;
 
-public class Produto  {
+public class Produto {
 
     private int idProduto;
     private String nome;
     private String categoria;
     private double valorVenda;
     private double valorProduto;
-
 
     public Produto(int idProduto, String nome, String categoria, double valorVenda, double valorProduto) {
         this.idProduto = idProduto;
@@ -18,7 +17,6 @@ public class Produto  {
     }
 
     public Produto() {
-
     }
 
     public int getIdProduto() {
@@ -60,5 +58,5 @@ public class Produto  {
     public void setValorProduto(double valorProduto) {
         this.valorProduto = valorProduto;
     }
-
 }
+

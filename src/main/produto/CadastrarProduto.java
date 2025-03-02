@@ -1,36 +1,79 @@
 package produto;
+
 import interfaces.Repositorio;
+import interfaces.ValidacaoProduto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class CadastrarProduto extends Produto implements Repositorio<Produto> {
 
-    Scanner sc = new Scanner(System.in);
+    private ValidacaoProduto validacaoProduto;
+    private Scanner sc = new Scanner(System.in);
     public List<Produto> listaProdutos = new ArrayList<>();
     private int id = 0;
 
-    public List<Produto> getListaProdutos() {
-        return listaProdutos;
+    public CadastrarProduto(ValidacaoProduto validacaoProduto) {
+        this.validacaoProduto = validacaoProduto;
     }
 
     @Override
     public void cadastrar(Produto produto) {
         produto.setIdProduto(++id);
 
-        System.out.print("Digite o nome do produto: ");
-        produto.setNome(sc.nextLine());
+        String nome;
 
-        System.out.print("Digite a categoria do produto: ");
-        produto.setCategoria(sc.nextLine());
+        do {
+            System.out.print("Digite o nome do produto: ");
+            nome = sc.nextLine();
+            if (validacaoProduto.validarNome(nome)) {
+                break;
+            } else {
+                System.out.println("O nome do produto não pode ser vazio ou nulo.");
+            }
+        } while (true);
+        produto.setNome(nome);
 
-        System.out.print("Informe o valor de venda do produto: ");
-        produto.setValorVenda(sc.nextDouble());
-        sc.nextLine();
+        String categoria;
 
-        System.out.print("Informe o valor do produto: ");
-        produto.setValorProduto(sc.nextDouble());
-        sc.nextLine();
+        do {
+            System.out.print("Digite a categoria do produto: ");
+            categoria = sc.nextLine();
+            if (validacaoProduto.validarCategoria(categoria)) {
+                break;
+            } else {
+                System.out.println("A categoria do produto não pode ser vazia ou nula.");
+            }
+        } while (true);
+        produto.setCategoria(categoria);
+
+        double valorVenda;
+
+        do {
+            System.out.print("Informe o valor de venda do produto: ");
+            valorVenda = sc.nextDouble();
+            sc.nextLine();
+            if (validacaoProduto.validarValorVenda(valorVenda)) {
+                break;
+            } else {
+                System.out.println("O valor de venda deve ser maior que zero.");
+            }
+        } while (true);
+        produto.setValorVenda(valorVenda);
+
+        double valorProduto;
+
+        do {
+            System.out.print("Informe o valor do produto: ");
+            valorProduto = sc.nextDouble();
+            sc.nextLine();
+            if (validacaoProduto.validarValorProduto(valorProduto)) {
+                break;
+            } else {
+                System.out.println("O valor do produto deve ser maior que zero.");
+            }
+        } while (true);
+        produto.setValorProduto(valorProduto);
 
         listaProdutos.add(produto);
 
@@ -44,20 +87,19 @@ public class CadastrarProduto extends Produto implements Repositorio<Produto> {
 
     @Override
     public void listar() {
-
         for (Produto produto : listaProdutos) {
-            System.out.println("Identificador: " + produto.getIdProduto() +
-                    " | Nome do produto: " + produto.getNome() +
-                    " | Categoria do produto: " + produto.getCategoria() +
-                    " | Valor de venda: " + produto.getValorVenda() +
-                    " | Valor do produto: " + produto.getValorProduto());
+            System.out.println("Lista de produtos Cadastrados: ");
+            System.out.println("ID Produto: " + produto.getIdProduto());
+            System.out.println("Nome do produto: " + produto.getNome());
+            System.out.println("Categoria do produto: " + produto.getCategoria());
+            System.out.println("Valor de venda: " + produto.getValorVenda());
+            System.out.println("Valor do produto: " + produto.getValorProduto());
+            System.out.println();
         }
-
     }
 
     @Override
     public void atualizar(Produto produto) {
-
         System.out.println("Digite o ID do produto que deseja atualizar: ");
         int idProduto = sc.nextInt();
         sc.nextLine();
@@ -81,31 +123,77 @@ public class CadastrarProduto extends Produto implements Repositorio<Produto> {
 
                     switch (opcao) {
                         case 1:
-                            System.out.print("Digite o novo nome do produto: ");
-                            produtos.setNome(sc.nextLine());
+
+                            String novoNome;
+                            do {
+                                System.out.print("Digite o novo nome do produto: ");
+                                novoNome = sc.nextLine();
+                                if (validacaoProduto.validarNome(novoNome)) {
+                                    break;
+                                } else {
+                                    System.out.println("O nome do produto não pode ser vazio ou nulo.");
+                                }
+                            } while (true);
+                            produtos.setNome(novoNome);
                             break;
+
                         case 2:
-                            System.out.print("Digite a categoria do produto: ");
-                            produtos.setCategoria(sc.nextLine());
+
+                            String novaCategoria;
+                            do {
+                                System.out.print("Digite a nova categoria do produto: ");
+                                novaCategoria = sc.nextLine();
+                                if (validacaoProduto.validarCategoria(novaCategoria)) {
+                                    break;
+                                } else {
+                                    System.out.println("A categoria do produto não pode ser vazia ou nula.");
+                                }
+                            } while (true);
+                            produtos.setCategoria(novaCategoria);
                             break;
+
                         case 3:
-                            System.out.print("Informe o valor de venda do produto: ");
-                            produtos.setValorVenda(sc.nextDouble());
-                            sc.nextLine();
+
+                            double novoValorVenda;
+                            do {
+                                System.out.print("Informe o novo valor de venda do produto: ");
+                                novoValorVenda = sc.nextDouble();
+                                sc.nextLine();
+                                if (validacaoProduto.validarValorVenda(novoValorVenda)) {
+                                    break;
+                                } else {
+                                    System.out.println("O valor de venda deve ser maior que zero.");
+                                }
+                            } while (true);
+                            produtos.setValorVenda(novoValorVenda);
                             break;
+
                         case 4:
-                            System.out.print("Informe o valor de aquisição do produto: ");
-                            produtos.setValorProduto(sc.nextDouble());
-                            sc.nextLine();
+                            // Validação para o novo valor de aquisição do produto
+                            double novoValorProduto;
+                            do {
+                                System.out.print("Informe o novo valor de aquisição do produto: ");
+                                novoValorProduto = sc.nextDouble();
+                                sc.nextLine();
+                                if (validacaoProduto.validarValorProduto(novoValorProduto)) {
+                                    break;
+                                } else {
+                                    System.out.println("O valor do produto deve ser maior que zero.");
+                                }
+                            } while (true);
+                            produtos.setValorProduto(novoValorProduto);
                             break;
+
                         case 5:
                             System.out.println("Saindo...");
                             loop = false;
                             break;
+
                         default:
                             System.out.println("Digite uma opção válida.");
                     }
                 }
+
 
                 System.out.println("-------Produto atualizado com sucesso!-------");
                 System.out.println("ID: " + produtos.getIdProduto());
@@ -119,16 +207,10 @@ public class CadastrarProduto extends Produto implements Repositorio<Produto> {
         System.out.println("Produto não encontrado para atualizar.");
     }
 
-    public void consultarPeloCliente() {
 
-        for (Produto produto : listaProdutos) {
-            System.out.println("Identificador: " + produto.getIdProduto() +
-                    " | Nome do produto: " + produto.getNome() +
-                    " | Categoria do produto: " + produto.getCategoria() +
-                    " | Valor de venda: " + produto.getValorVenda());
-        }
-
+    public List<Produto> getListaProdutos() {
+        return listaProdutos;
     }
-
-
 }
+
+

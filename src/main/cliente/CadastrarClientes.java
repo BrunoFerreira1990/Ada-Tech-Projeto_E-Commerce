@@ -32,6 +32,8 @@ public class CadastrarClientes implements Repositorio<Cliente> {
         }
     }
 
+
+
     @Override
     public void atualizar(Cliente cliente) {
         System.out.println("Digite o ID do cliente a ser atualizado: ");
@@ -46,7 +48,7 @@ public class CadastrarClientes implements Repositorio<Cliente> {
 
         System.out.println("Cliente encontrado: " + clienteExistente);
 
-        // Menu para o usuário escolher o campo que deseja atualizar
+
         System.out.println("\nEscolha o campo que deseja atualizar:");
         System.out.println("1 - Nome");
         System.out.println("2 - CPF");
@@ -78,10 +80,9 @@ public class CadastrarClientes implements Repositorio<Cliente> {
         }
 
         System.out.println("Cliente atualizado com sucesso!");
-        System.out.println(clienteExistente);  // Exibe o cliente atualizado
+        System.out.println(clienteExistente);
     }
 
-    // Métodos para atualizar campos individuais do cliente
     private void atualizarNome(Cliente cliente) {
         String nome;
         do {

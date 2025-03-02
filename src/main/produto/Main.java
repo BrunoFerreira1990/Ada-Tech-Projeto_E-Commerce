@@ -1,12 +1,14 @@
 package produto;
 
+import interfaces.ValidacaoProduto;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
-        CadastrarProduto produto = new CadastrarProduto();
+        ValidacaoProduto validacaoProduto = new ValidacaoDadosProduto();
+        CadastrarProduto produto = new CadastrarProduto(validacaoProduto);
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -28,18 +30,15 @@ public class Main {
                     break;
 
                 case 2:
-
                     Produto atualizarProduto = new Produto();
                     produto.atualizar(atualizarProduto);
                     break;
 
                 case 3:
-
                     produto.listar();
                     break;
 
                 case 4:
-
                     System.out.println("Saindo...");
                     return;
 
@@ -49,3 +48,4 @@ public class Main {
         }
     }
 }
+

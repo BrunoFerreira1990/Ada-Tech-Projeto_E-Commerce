@@ -2,8 +2,10 @@ package pedido;
 
 import cliente.Cliente;
 import enums.StatusPedido;
+import interfaces.ValidacaoProduto;
 import produto.CadastrarProduto;
 import produto.Produto;
+import produto.ValidacaoDadosProduto;
 
 import java.util.*;
 
@@ -155,9 +157,11 @@ public class Pedido {
         } while (opcao != 3);
     }
 
-
     public void removerProdutoDoPedido() {
-        CadastrarProduto cadastro = new CadastrarProduto();
+
+        ValidacaoProduto validacaoProduto = new ValidacaoDadosProduto();
+
+        CadastrarProduto cadastro = new CadastrarProduto(validacaoProduto);
         Scanner sc = new Scanner(System.in);
 
         if (this.statusPedido != StatusPedido.ABERTO) {
@@ -210,8 +214,8 @@ public class Pedido {
             }
 
         } while (opcao != 3);
-
     }
+
 
     public void alterarQuantidadeProduto() {
         Scanner sc = new Scanner(System.in);
@@ -265,7 +269,7 @@ public class Pedido {
 
         for (Produto produto : cadastro.getListaProdutos()) {
             if (produto.getIdProduto() == idProduto) {
-                return produto; // Retorna o produto encontrado
+                return produto;
             }
         }
 
@@ -273,9 +277,9 @@ public class Pedido {
         return null;
     }
 
+
     public static void consultarProdutosCarrinho(Map<Produto, Integer> listaDePedido) {
 
-        System.out.println("Produtos no pedido:");
         if (listaDePedido.isEmpty()) {
             System.out.println("Nenhum produto foi adicionado ao pedido.");
         } else {
@@ -283,14 +287,14 @@ public class Pedido {
                 Produto produto = entry.getKey();
                 int quantidade = entry.getValue();
 
-                System.out.println("ID: " + produto.getIdProduto() +
-                        " | Nome: " + produto.getNome() +
-                        " | Categoria: " + produto.getCategoria() +
-                        " | Valor de venda: " + produto.getValorVenda() +
-                        " | Quantidade: " + quantidade);
+                System.out.println("Produtos Adicionados no pedido:");
+                System.out.println("ID Produto: " + produto.getIdProduto());
+                System.out.println("Nome: " + produto.getNome());
+                System.out.println("Categoria: " + produto.getCategoria());
+                System.out.println("Valor de venda: " + produto.getValorVenda());
+                System.out.println("Quantidade: " + quantidade);
             }
+
         }
-
     }
-
 }

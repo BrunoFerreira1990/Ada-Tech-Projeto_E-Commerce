@@ -2,10 +2,12 @@ package pedido;
 
 import cliente.CadastrarClientes;
 import cliente.Cliente;
+import interfaces.ValidacaoProduto;
 import produto.CadastrarProduto;
 import produto.Produto;
 import enums.FormasEntrega;
 import enums.StatusPedido;
+import produto.ValidacaoDadosProduto;
 
 import java.util.Scanner;
 
@@ -13,7 +15,11 @@ public class Main {
 
     public static void main(String[] args) {
         CadastrarClientes cadastrarClientes = new CadastrarClientes();
-        CadastrarProduto produto = new CadastrarProduto();
+        ValidacaoProduto validacaoProduto = new ValidacaoDadosProduto();
+
+        CadastrarProduto produto = new CadastrarProduto(validacaoProduto);
+
+
         Pedido pedido = new Pedido(produto);
 
         Scanner sc = new Scanner(System.in);
@@ -117,7 +123,6 @@ public class Main {
                         int idCliente = sc.nextInt();
                         sc.nextLine();
 
-                        // Alteração aqui para chamar o método correto
                         Cliente clienteSelecionado = cadastrarClientes.buscarPorId(idCliente);
 
                         if (clienteSelecionado != null) {
