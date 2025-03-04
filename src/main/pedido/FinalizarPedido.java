@@ -4,11 +4,23 @@ import enums.FormasEntrega;
 import enums.StatusPedido;
 import produto.Produto;
 import Notificacao.Notificacao;
-import cliente.Cliente;
 
 import java.util.Map;
 
 public class FinalizarPedido {
+    private double valorPedido;
+
+    public FinalizarPedido(double valorPedido) {
+        this.valorPedido = valorPedido;
+    }
+
+    public FinalizarPedido() {
+
+    }
+
+    public double getValorPedido() {
+        return valorPedido;
+    }
 
     public void finalizar(Pedido pedido, FormasEntrega formaEntrega) {
         if (pedido.getStatusPedido() != StatusPedido.ABERTO) {
@@ -40,6 +52,7 @@ public class FinalizarPedido {
             int quantidade = entry.getValue();
             valorTotal += produto.getValorVenda() * quantidade;
         }
+        valorPedido = valorTotal;
         return valorTotal;
     }
 }
