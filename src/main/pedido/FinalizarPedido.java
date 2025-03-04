@@ -11,7 +11,6 @@ import java.util.Map;
 public class FinalizarPedido {
 
     public void finalizar(Pedido pedido, FormasEntrega formaEntrega) {
-        // Verifica se o pedido está aberto
         if (pedido.getStatusPedido() != StatusPedido.ABERTO) {
             System.out.println("O status do pedido não está aberto. Não é possível finalizar.");
             return;
@@ -29,18 +28,8 @@ public class FinalizarPedido {
         pedido.setStatusPedido(StatusPedido.AGUARDANDO_PAGAMENTO);
         System.out.println("Pedido " + pedido.getIdPedido() + " finalizado e status alterado para: " + pedido.getStatusPedido());
 
-        // Enviar notificações após alteração de status
-        enviarNotificacoes(pedido);
-    }
-
-    private void enviarNotificacoes(Pedido pedido) {
-        Cliente cliente = pedido.getCliente();
-        Notificacao notificacao = new Notificacao(cliente, pedido);
-
-        // Enviar notificações de email, WhatsApp e SMS
-        notificacao.enviarEmail(cliente.getEmail());
-        notificacao.enviarWhatsapp(cliente.getTelefone());
-        notificacao.enviarSMS(cliente.getTelefone());
+        Notificacao notificacao = new Notificacao(pedido.getCliente(), pedido);
+        notificacao.enviarNotificacoes(pedido);
     }
 
     private double calcularValorProdutos(Pedido pedido) {
