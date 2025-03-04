@@ -42,4 +42,13 @@ public class Notificacao implements Comunicacao {
         String telefone = cliente.getTelefone();
         System.out.println(dados + ", Enviando SMS para: " + telefone);
     }
+
+    public void enviarNotificacoes(Pedido pedido) {
+        Cliente cliente = pedido.getCliente();
+        Notificacao notificacao = new Notificacao(cliente, pedido);
+
+        notificacao.enviarEmail(cliente.getEmail());
+        notificacao.enviarWhatsapp(cliente.getTelefone());
+        notificacao.enviarSMS(cliente.getTelefone());
+    }
 }
