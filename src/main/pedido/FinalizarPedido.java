@@ -31,6 +31,7 @@ public class FinalizarPedido {
         double valorProdutos = calcularValorProdutos(pedido);
         double valorFrete = formaEntrega.getValor();
         double valorTotal = valorProdutos + valorFrete;
+        valorPedido = valorTotal;
 
         System.out.println("Resumo do Pedido:");
         System.out.println("Valor dos Produtos: R$ " + valorProdutos);
@@ -52,7 +53,7 @@ public class FinalizarPedido {
             int quantidade = entry.getValue();
             valorTotal += produto.getValorVenda() * quantidade;
         }
-        valorPedido = valorTotal;
+
         return valorTotal;
     }
 }
