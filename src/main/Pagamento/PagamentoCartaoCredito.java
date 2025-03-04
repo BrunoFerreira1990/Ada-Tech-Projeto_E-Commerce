@@ -28,12 +28,18 @@ public class PagamentoCartaoCredito extends Pagamento{
         do {
 
             System.out.println("\nEscolha em quantas parcelas irá parcelar:");
-            System.out.println("1 - À vista: " + pedidoFinalizado.getValorPedido());
-            System.out.println("2 - Duas vezes: " + pedidoFinalizado.getValorPedido()/2);
-            System.out.println("3 - Três vezes: " + pedidoFinalizado.getValorPedido()/3);
-            System.out.println("4 - Quatro vezes: " + pedidoFinalizado.getValorPedido()/4);
-            System.out.println("5 - Cinco vezes: " + pedidoFinalizado.getValorPedido()/5);
-            System.out.println("6 - Seis vezes: " + pedidoFinalizado.getValorPedido()/6);
+            System.out.printf("1 - À vista: " + pedidoFinalizado.getValorPedido());
+            System.out.println();
+            System.out.printf("2 - Duas vezes de R$%.2f", pedidoFinalizado.getValorPedido()/2);
+            System.out.println();
+            System.out.printf("3 - Três vezes de R$%.2f", pedidoFinalizado.getValorPedido()/3);
+            System.out.println();
+            System.out.printf("4 - Quatro vezes de R$%.2f", pedidoFinalizado.getValorPedido()/4);
+            System.out.println();
+            System.out.printf("5 - Cinco vezes de R$%.2f", pedidoFinalizado.getValorPedido()/5);
+            System.out.println();
+            System.out.printf("6 - Seis vezes de R$%.2f", pedidoFinalizado.getValorPedido()/6);
+            System.out.println();
             System.out.print("\nEscolha uma das opções: ");
             opcao = sc.nextInt();
 
