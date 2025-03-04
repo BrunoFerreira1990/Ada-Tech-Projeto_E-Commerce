@@ -1,5 +1,9 @@
 package pedido;
 
+import Pagamento.PagamentoCartaoCredito;
+import Pagamento.PagamentoDebito;
+import Pagamento.PagamentoFinalizado;
+import Pagamento.PagamentoPix;
 import cliente.CadastrarClientes;
 import cliente.Cliente;
 import interfaces.ValidacaoProduto;
@@ -14,13 +18,13 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+        Cliente cliente = new Cliente();
         CadastrarClientes cadastrarClientes = new CadastrarClientes();
         ValidacaoProduto validacaoProduto = new ValidacaoDadosProduto();
-
+        PagamentoFinalizado pagamentoFinalizado = new PagamentoFinalizado();
         CadastrarProduto produto = new CadastrarProduto(validacaoProduto);
-
-
         Pedido pedido = new Pedido(produto);
+        FinalizarPedido finalizarPedido = new FinalizarPedido();
 
         Scanner sc = new Scanner(System.in);
         int menuPrincipal;
@@ -30,8 +34,9 @@ public class Main {
             System.out.println("2 - Cadastro de produtos");
             System.out.println("3 - Adição de produtos no carrinho de compras");
             System.out.println("4 - Finalizar pedido");
-            System.out.println("5 - Consultar pedido");
-            System.out.println("6 - Sair do sistema");
+            System.out.println("5 - Realizar o pagamento do pedido");
+            System.out.println("6 - Consultar pedido");
+            System.out.println("7 - Sair do sistema");
             System.out.print("Escolha uma opção: ");
             menuPrincipal = sc.nextInt();
             System.out.println();
@@ -208,8 +213,7 @@ public class Main {
 
 
                         if (formaEntrega != null) {
-                            //finalizar pedido
-                            FinalizarPedido finalizarPedido = new FinalizarPedido();
+                            finalizarPedido = new FinalizarPedido();
                             finalizarPedido.finalizar(pedido, formaEntrega);
 
                         } else {
@@ -219,9 +223,41 @@ public class Main {
                         System.out.println("Não é possível finalizar um pedido com status diferente de ABERTO.");
                     }
                     break;
-
-
                 case 5:
+                    int opcaoPagamento;
+                    do {
+                        System.out.println("\nSelecione o método de pagamento:");
+                        System.out.println("1 - Débito");
+                        System.out.println("2 - Crédito");
+                        System.out.println("3 - Pix");
+                        System.out.println("4 - Sair para o Menu Principal\n");
+                        System.out.print("Escolha uma opção: ");
+                        opcaoPagamento = sc.nextInt();
+                        switch (opcaoPagamento){
+                            case 1:
+                                PagamentoDebito pagamentoDebito = new PagamentoDebito();
+                                pagamentoDebito.pagar(pedido, finalizarPedido);
+                                pagamentoFinalizado.finalizarPagamento(cliente, pedido);
+                                return;
+                            case 2:
+                                PagamentoCartaoCredito pagamentoCredito = new PagamentoCartaoCredito();
+                                pagamentoCredito.pagar(pedido, finalizarPedido);
+                                pagamentoFinalizado.finalizarPagamento(cliente, pedido);
+                                return;
+                            case 3:
+                                PagamentoPix pagamentoPix = new PagamentoPix();
+                                pagamentoPix.pagar(pedido, finalizarPedido);
+                                pagamentoFinalizado.finalizarPagamento(cliente, pedido);
+                                return;
+                            case 4:
+                                System.out.println("Saindo para o Menu Principal");
+                                break;
+                            default:
+                                System.out.println("Opção inválida, digite novamente.");
+                        }
+                    } while(opcaoPagamento != 4);
+
+                case 6:
 
                     System.out.println("\n--- CONSULTAR PEDIDO ---");
                     if (pedido.getCliente() != null) {
@@ -234,14 +270,14 @@ public class Main {
                     }
                     break;
 
-                case 6:
+                case 7:
                     System.out.println("Saindo do sistema.");
                     break;
 
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
-        } while (menuPrincipal != 6);
+        } while (menuPrincipal != 7);
     }
 }
 

@@ -77,7 +77,8 @@ public class PagamentoCartaoCredito extends Pagamento{
     private void  parcelarPedido(int opcao, Pedido pedido, FinalizarPedido pedidoFinalizado) {
         System.out.println("\nProcessando...");
         System.out.println("\nPagamento efetuado com sucesso!");
-        System.out.println("Parcelamento da compra em " + opcao + "x de R$" + pedidoFinalizado.getValorPedido()/opcao);
+        System.out.printf("Parcelamento da compra de R$%.2f em %dx de R$%.2f%n",
+                pedidoFinalizado.getValorPedido(), opcao, pedidoFinalizado.getValorPedido() / opcao);
         pedido.setStatusPedido(StatusPedido.PAGO);
         System.out.println("");
     }
