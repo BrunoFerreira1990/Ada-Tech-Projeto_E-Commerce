@@ -78,24 +78,19 @@ public class CadastrarProduto extends Produto implements Repositorio<Produto> {
         listaProdutos.add(produto);
 
         System.out.println("-------Produto cadastrado com sucesso!-------");
-        System.out.println("ID: " + produto.getIdProduto());
-        System.out.println("Nome do produto: " + produto.getNome());
-        System.out.println("Valor de venda do produto: " + produto.getValorVenda());
-        System.out.println("Valor de aquisição do produto: " + produto.getValorProduto());
+        System.out.printf("ID: %d | Nome do produto: %s | Categoria do produto: %s | Valor de aquisição: R$%.2f | Valor de venda: R$%.2f%n",
+                produto.getIdProduto(), produto.getNome(), produto.getCategoria(), produto.getValorProduto(), produto.getValorVenda());
         System.out.println("--------------------------------------------");
     }
 
     @Override
     public void listar() {
+        System.out.println("\nLista de produtos Cadastrados: ");
         for (Produto produto : listaProdutos) {
-            System.out.println("Lista de produtos Cadastrados: ");
-            System.out.println("ID Produto: " + produto.getIdProduto());
-            System.out.println("Nome do produto: " + produto.getNome());
-            System.out.println("Categoria do produto: " + produto.getCategoria());
-            System.out.println("Valor de venda: " + produto.getValorVenda());
-            System.out.println("Valor do produto: " + produto.getValorProduto());
-            System.out.println();
+            System.out.printf("ID: %d | Nome do produto: %s | Categoria do produto: %s | Valor de aquisição: R$%.2f | Valor de venda: R$%.2f%n",
+                    produto.getIdProduto(), produto.getNome(), produto.getCategoria(), produto.getValorProduto(), produto.getValorVenda());
         }
+        System.out.println("---------------------------------");
     }
 
     @Override
@@ -169,7 +164,6 @@ public class CadastrarProduto extends Produto implements Repositorio<Produto> {
                             break;
 
                         case 4:
-                            // Validação para o novo valor de aquisição do produto
                             double novoValorProduto;
                             do {
                                 System.out.print("Informe o novo valor de aquisição do produto: ");
@@ -196,10 +190,9 @@ public class CadastrarProduto extends Produto implements Repositorio<Produto> {
 
 
                 System.out.println("-------Produto atualizado com sucesso!-------");
-                System.out.println("ID: " + produtos.getIdProduto());
-                System.out.println("Nome: " + produtos.getNome());
-                System.out.println("Valor de venda: " + produtos.getValorVenda());
-                System.out.println("Valor do produto: " + produtos.getValorProduto());
+                System.out.printf("ID: %d | Nome do produto: %s | Categoria do produto: %s | Valor de aquisição: R$%.2f | Valor de venda: R$%.2f%n",
+                        produtos.getIdProduto(), produtos.getNome(), produtos.getCategoria(), produtos.getValorProduto(), produtos.getValorVenda());
+
                 return;
             }
         }
@@ -212,5 +205,3 @@ public class CadastrarProduto extends Produto implements Repositorio<Produto> {
         return listaProdutos;
     }
 }
-
-
