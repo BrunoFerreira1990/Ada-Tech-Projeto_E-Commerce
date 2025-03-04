@@ -1,4 +1,4 @@
-package pedido;
+package Main;
 
 import Pagamento.PagamentoCartaoCredito;
 import Pagamento.PagamentoDebito;
@@ -7,6 +7,8 @@ import Pagamento.PagamentoPix;
 import cliente.CadastrarClientes;
 import cliente.Cliente;
 import interfaces.ValidacaoProduto;
+import pedido.FinalizarPedido;
+import pedido.Pedido;
 import produto.CadastrarProduto;
 import produto.Produto;
 import enums.FormasEntrega;
