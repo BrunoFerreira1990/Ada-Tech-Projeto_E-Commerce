@@ -43,6 +43,7 @@ public class FinalizarPedido {
 
         Notificacao notificacao = new Notificacao(pedido.getCliente(), pedido);
         notificacao.enviarNotificacoes(pedido);
+
     }
 
     private double calcularValorProdutos(Pedido pedido) {
@@ -56,5 +57,6 @@ public class FinalizarPedido {
 
         return valorTotal;
     }
+
 }
 

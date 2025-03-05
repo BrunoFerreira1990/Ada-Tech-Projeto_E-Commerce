@@ -1,5 +1,6 @@
 package Main;
 
+import Logistica.EscolherFormaEntrega;
 import Pagamento.PagamentoCartaoCredito;
 import Pagamento.PagamentoDebito;
 import Pagamento.PagamentoFinalizado;
@@ -180,43 +181,19 @@ public class Main {
                         }
                     } while (opcaoPedido != 5);
                     break;
-
                 case 4:
-
                     if (pedido.getStatusPedido() == StatusPedido.ABERTO) {
-
-                        System.out.println("Escolha a forma de entrega para o pedido:");
-                        System.out.println("1 - PAC - R$ " + FormasEntrega.PAC.getValor());
-                        System.out.println("2 - SEDEX - R$ " + FormasEntrega.SEDEX.getValor());
-                        System.out.println("3 - TRANSPORTADORA - R$ " + FormasEntrega.TRANSPORTADORA.getValor());
-
-
-                        System.out.print("Escolha uma opção: ");
-
-                        int formaEntregaEscolhida = sc.nextInt();
-
-
-                        FormasEntrega formaEntrega = null;
-
-                        switch (formaEntregaEscolhida) {
-                            case 1:
-                                formaEntrega = FormasEntrega.PAC;
-                                break;
-                            case 2:
-                                formaEntrega = FormasEntrega.SEDEX;
-                                break;
-                            case 3:
-                                formaEntrega = FormasEntrega.TRANSPORTADORA;
-                                break;
-                            default:
-                                System.out.println("Opção inválida.");
-                                break;
-                        }
-
+                        EscolherFormaEntrega escolherFormaEntrega = new EscolherFormaEntrega();
+                        FormasEntrega formaEntrega = escolherFormaEntrega.escolherFormaEntrega(sc);
 
                         if (formaEntrega != null) {
                             finalizarPedido = new FinalizarPedido();
                             finalizarPedido.finalizar(pedido, formaEntrega);
+
+                            // Passa para o método finalizarPagamento sem precisar alterar a classe PagamentoFinalizado
+                            PagamentoFinalizado.finalizarPagamento(cliente, pedido);
+                            // Agora a forma de entrega escolhida está acessível através da variável estática
+                            System.out.println("A forma de entrega escolhida foi: " + EscolherFormaEntrega.formaEntregaEscolhida.name());  // Exibe a forma escolhida
 
                         } else {
                             System.out.println("Não foi possível finalizar o pedido, pois a forma de entrega é inválida.");
@@ -225,6 +202,8 @@ public class Main {
                         System.out.println("Não é possível finalizar um pedido com status diferente de ABERTO.");
                     }
                     break;
+
+
                 case 5:
                     int opcaoPagamento;
                     do {
