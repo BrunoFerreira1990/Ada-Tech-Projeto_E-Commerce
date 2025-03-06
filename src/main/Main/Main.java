@@ -10,11 +10,9 @@ import cliente.Cliente;
 import interfaces.ValidacaoProduto;
 import pedido.FinalizarPedido;
 import pedido.Pedido;
-import produto.CadastrarProduto;
-import produto.Produto;
+import produto.*;
 import enums.FormasEntrega;
 import enums.StatusPedido;
-import produto.ValidacaoDadosProduto;
 
 import java.util.Scanner;
 
@@ -87,7 +85,7 @@ public class Main {
                         System.out.println("\n------ MENU CADASTRO DE PRODUTOS ------");
                         System.out.println("1 - Cadastrar produto");
                         System.out.println("2 - Atualizar produto");
-                        System.out.println("3 - Listar produto");
+                        System.out.println("3 - Listar produtos");
                         System.out.println("4 - Voltar ao Menu Principal\n");
                         System.out.print("Escolha uma opção: ");
 
@@ -96,12 +94,28 @@ public class Main {
 
                         switch (opcaoProduto) {
                             case 1:
-                                Produto novoProduto = new Produto();
+                                Produto novoProduto = null;
                                 produto.cadastrar(novoProduto);
                                 break;
                             case 2:
-                                Produto atualizarProduto = new Produto();
-                                produto.atualizar(atualizarProduto);
+                                produto.listar();
+
+                                System.out.print("Informe o ID do produto que deseja atualizar: ");
+                                int idProdutoAtualizar = sc.nextInt();
+                                sc.nextLine();
+
+                                Produto produtoAtualizar = null;
+                                for (Produto p : produto.getListaProdutos()) {
+                                    if (p.getIdProduto() == idProdutoAtualizar) {
+                                        produtoAtualizar = p;
+                                        break;
+                                    }
+                                }
+                                if (produtoAtualizar != null) {
+                                    produto.atualizar(produtoAtualizar);
+                                } else {
+                                    System.out.println("Produto não encontrado.");
+                                }
                                 break;
                             case 3:
                                 produto.listar();
@@ -118,7 +132,8 @@ public class Main {
 
                 case 3:
                     if (pedido.getCliente() == null) {
-                        System.out.println("Nenhum cliente associado ao pedido. Selecione um cliente antes de adicionar produtos.");
+                        System.out.println("Nenhum cliente associado ao pedido. Selecione um cliente antes de " +
+                                "adicionar produtos.");
                         cadastrarClientes.listar();
 
                         System.out.print("Informe o ID do cliente que deseja associar ao pedido: ");
@@ -189,14 +204,12 @@ public class Main {
                         if (formaEntrega != null) {
                             finalizarPedido = new FinalizarPedido();
                             finalizarPedido.finalizar(pedido, formaEntrega);
-
-                            // Passa para o método finalizarPagamento sem precisar alterar a classe PagamentoFinalizado
                             PagamentoFinalizado.finalizarPagamento(cliente, pedido);
-                            // Agora a forma de entrega escolhida está acessível através da variável estática
-                            System.out.println("A forma de entrega escolhida foi: " + EscolherFormaEntrega.formaEntregaEscolhida.name());  // Exibe a forma escolhida
+                            System.out.println("A forma de entrega escolhida foi: " + EscolherFormaEntrega.formaEntregaEscolhida.name());
 
                         } else {
-                            System.out.println("Não foi possível finalizar o pedido, pois a forma de entrega é inválida.");
+                            System.out.println("Não foi possível finalizar o pedido, pois a forma de entrega é " +
+                                    "inválida.");
                         }
                     } else {
                         System.out.println("Não é possível finalizar um pedido com status diferente de ABERTO.");
@@ -214,7 +227,7 @@ public class Main {
                         System.out.println("4 - Sair para o Menu Principal\n");
                         System.out.print("Escolha uma opção: ");
                         opcaoPagamento = sc.nextInt();
-                        switch (opcaoPagamento){
+                        switch (opcaoPagamento) {
                             case 1:
                                 PagamentoDebito pagamentoDebito = new PagamentoDebito();
                                 pagamentoDebito.pagar(pedido, finalizarPedido);
@@ -236,7 +249,7 @@ public class Main {
                             default:
                                 System.out.println("Opção inválida, digite novamente.");
                         }
-                    } while(opcaoPagamento != 4);
+                    } while (opcaoPagamento != 4);
 
                 case 6:
 
