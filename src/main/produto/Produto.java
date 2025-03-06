@@ -1,22 +1,32 @@
 package produto;
 
-public class Produto {
+public abstract class Produto {
 
     private int idProduto;
     private String nome;
     private String categoria;
     private double valorVenda;
     private double valorProduto;
+    private String cor;
 
-    public Produto(int idProduto, String nome, String categoria, double valorVenda, double valorProduto) {
+    public Produto(int idProduto, String nome, String categoria, double valorVenda, double valorProduto, String cor) {
         this.idProduto = idProduto;
         this.nome = nome;
         this.categoria = categoria;
         this.valorVenda = valorVenda;
         this.valorProduto = valorProduto;
+        this.cor = cor;
     }
 
     public Produto() {
+    }
+
+    public String getCor() {
+        return cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
     }
 
     public int getIdProduto() {
@@ -59,4 +69,3 @@ public class Produto {
         this.valorProduto = valorProduto;
     }
 }
-
