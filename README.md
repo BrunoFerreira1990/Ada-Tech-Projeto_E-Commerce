@@ -28,3 +28,4 @@ A Ada Tech pretende realizar a venda de produtos através de um E-Commerce e, pa
 
 - [Bruno Ferreira](https://github.com/BrunoFerreira1990)
 - [Anderson Santos](https://github.com/santos-anderson)
+- [Carlos Angelo](https://github.com/carlos-angelo)
