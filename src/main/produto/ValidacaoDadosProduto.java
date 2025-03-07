@@ -1,8 +1,25 @@
 package produto;
-
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import interfaces.ValidacaoProduto;
 
 public class ValidacaoDadosProduto implements ValidacaoProduto {
+
+
+    private static double converterParaDouble(String valorStr) {
+
+        valorStr = valorStr.replace(",", ".");
+
+        try {
+
+            DecimalFormat df = new DecimalFormat();
+            df.setParseBigDecimal(true);
+            return df.parse(valorStr).doubleValue();
+        } catch (ParseException e) {
+
+            return -1;
+        }
+    }
 
     @Override
     public boolean validarNome(String nome) {
@@ -16,12 +33,20 @@ public class ValidacaoDadosProduto implements ValidacaoProduto {
 
     @Override
     public boolean validarValorVenda(double valorVenda) {
-        return valorVenda > 0;
+        // Converte o valor para string e valida
+        String valorVendaStr = String.valueOf(valorVenda);
+
+        double valorConvertido = converterParaDouble(valorVendaStr);
+        return valorConvertido != -1 && valorConvertido > 0;
     }
 
     @Override
     public boolean validarValorProduto(double valorProduto) {
-        return valorProduto > 0;
+
+        String valorProdutoStr = String.valueOf(valorProduto);
+
+        double valorConvertido = converterParaDouble(valorProdutoStr);
+        return valorConvertido != -1 && valorConvertido > 0;
     }
 
     @Override
@@ -46,7 +71,7 @@ public class ValidacaoDadosProduto implements ValidacaoProduto {
 
     @Override
     public boolean validarDimensoes(String dimensoes) {
-        return dimensoes != null && dimensoes.matches("\\d+(\\.\\d+)?x\\d+(\\.\\d+)?x\\d+(\\.\\d+)?");
+        return dimensoes != null && dimensoes.matches("\\d+(\\.\\d+)?X\\d+(\\.\\d+)?X\\d+(\\.\\d+)?");
     }
 
     @Override
@@ -54,6 +79,8 @@ public class ValidacaoDadosProduto implements ValidacaoProduto {
         return cor != null && !cor.trim().isEmpty();
     }
 }
+
+
 
 
 

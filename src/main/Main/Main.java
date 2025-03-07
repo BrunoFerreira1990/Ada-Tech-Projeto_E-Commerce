@@ -259,6 +259,7 @@ public class Main {
                         System.out.println("Cliente: " + pedido.getCliente().getNome());
                         System.out.println("Status do Pedido: " + pedido.getStatusPedido());
                         Pedido.consultarProdutosCarrinho(pedido.getListaDePedido());
+                        System.out.println("Valor Total Pedido R$: " + FinalizarPedido.getValorPedido());
                     } else {
                         System.out.println("Nenhum pedido foi realizado ainda.");
                     }

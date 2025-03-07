@@ -3,9 +3,7 @@ package Pagamento;
 import Logistica.EscolherFormaEntrega;
 import Notificacao.Notificacao;
 import cliente.Cliente;
-import enums.FormasEntrega;
 import enums.StatusPedido;
-import pedido.FinalizarPedido;
 import pedido.Pedido;
 
 public class PagamentoFinalizado {
@@ -29,7 +27,7 @@ public class PagamentoFinalizado {
         pedido.setStatusPedido(StatusPedido.FINALIZADO);
         System.out.println("Compra realizada com sucesso!");
 
-        System.out.println(pedido.getCliente().getNome() + " o seu pedido: " + pedido.getIdPedido() +" saiu para Entrega para o Cep: " + pedido.getCliente().getCep() + " enviado via " + EscolherFormaEntrega.formaEntregaEscolhida);
+        System.out.println(pedido.getCliente().getNome() + " o seu pedido: " + pedido.getIdPedido() +" saiu para Entrega para o Cep: " + pedido.getCliente().getCep() + " enviado via " + EscolherFormaEntrega.formaEntregaEscolhida + ".");
 
         notificacao.enviarNotificacoes(pedido);
 

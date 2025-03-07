@@ -8,7 +8,7 @@ import Notificacao.Notificacao;
 import java.util.Map;
 
 public class FinalizarPedido {
-    private double valorPedido;
+    private static double valorPedido;
 
     public FinalizarPedido(double valorPedido) {
         this.valorPedido = valorPedido;
@@ -18,7 +18,7 @@ public class FinalizarPedido {
 
     }
 
-    public double getValorPedido() {
+    public static double getValorPedido() {
         return valorPedido;
     }
 

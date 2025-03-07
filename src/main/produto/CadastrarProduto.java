@@ -2,6 +2,10 @@ package produto;
 
 import interfaces.Repositorio;
 import interfaces.ValidacaoProduto;
+
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +19,20 @@ public class CadastrarProduto implements Repositorio<Produto> {
 
     public CadastrarProduto(ValidacaoProduto validacaoProduto) {
         this.validacaoProduto = validacaoProduto;
+    }
+
+
+    private double lerValor() {
+        String valorStr = sc.nextLine();
+        valorStr = valorStr.replace(",", ".");
+        try {
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.setParseBigDecimal(false);
+            return df.parse(valorStr).doubleValue();
+        } catch (ParseException e) {
+            System.out.println("Valor inválido. Tente novamente.");
+            return -1;
+        }
     }
 
     @Override
@@ -56,9 +74,8 @@ public class CadastrarProduto implements Repositorio<Produto> {
         double valorVenda;
         do {
             System.out.print("Informe o valor de venda do produto: ");
-            valorVenda = sc.nextDouble();
-            sc.nextLine();
-            if (validacaoProduto.validarValorVenda(valorVenda)) {
+            valorVenda = lerValor();
+            if (valorVenda != -1 && validacaoProduto.validarValorVenda(valorVenda)) {
                 break;
             } else {
                 System.out.println("O valor de venda deve ser maior que zero.");
@@ -69,9 +86,8 @@ public class CadastrarProduto implements Repositorio<Produto> {
         double valorProduto;
         do {
             System.out.print("Informe o valor do produto: ");
-            valorProduto = sc.nextDouble();
-            sc.nextLine();
-            if (validacaoProduto.validarValorProduto(valorProduto)) {
+            valorProduto = lerValor();
+            if (valorProduto != -1 && validacaoProduto.validarValorProduto(valorProduto)) {
                 break;
             } else {
                 System.out.println("O valor do produto deve ser maior que zero.");
@@ -105,9 +121,7 @@ public class CadastrarProduto implements Repositorio<Produto> {
         System.out.println("--------------------------------------------");
     }
 
-
     private Produto cadastrarEletrodomestico(ProdutosEletrodomesticos produto) {
-
         String voltagem;
         do {
             System.out.print("Digite a voltagem do eletrodoméstico: ");
@@ -381,7 +395,7 @@ public class CadastrarProduto implements Repositorio<Produto> {
         }
     }
 
-    public List<Produto> getListaProdutos() {
+        public List<Produto> getListaProdutos() {
         return listaProdutos;
     }
 }
